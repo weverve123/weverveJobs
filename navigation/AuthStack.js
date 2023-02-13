@@ -7,7 +7,7 @@ import Logout from '../src/components/Logout';
 import ForgotPassword from '../src/components/ForgotPassword';
 // import AuthStack from './AuthStack';
 import CustomDrower from '../src/components/CustomDrower';
-import Home from '../src/components/Home';
+// import Home from '../src/components/Home';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../src/components/Home';
 import AppStack from './AppStack';
