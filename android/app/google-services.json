@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "549139197190",
+    "project_id": "weversopening",
+    "storage_bucket": "weversopening.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549139197190:android:8b35825cdf5dd9efd40287",
+        "android_client_info": {
+          "package_name": "com.wevervejobs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549139197190-k5bqvq7lgqukls0252lb8l0i2ile8r97.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wevervejobs",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "549139197190-bta0sqjl8i51ohtt0e4sl68je5mc0hbl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3UYpZaoF5JEPW7hbGD7CifUv6rL-vqHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549139197190-bta0sqjl8i51ohtt0e4sl68je5mc0hbl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
