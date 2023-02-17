@@ -2,7 +2,8 @@ import { View, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import auth from '@react-native-firebase/auth';
 import Login from './Login';
-export default function Logout() {
+import AuthStack from '../../navigation/AuthStack';
+export default function Logout({navigation}) {
 
     useEffect(()=>{
        handleLogout();
@@ -10,7 +11,7 @@ export default function Logout() {
 
     const handleLogout=async()=>{
         try{ 
-            auth() .signOut().then(() => navigation.navigate(Login));
+            auth() .signOut().then(() => navigation.navigate("SignUp"));
             alert("LogOut succssesfully done");
         }
 

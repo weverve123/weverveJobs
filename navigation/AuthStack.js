@@ -11,16 +11,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../src/components/Home';
 import AppStack from './AppStack';
 
-
 const Auth =createNativeStackNavigator();
 
 export default function AuthStack() {
   return (
-
     <Auth.Navigator>
         <Auth.Screen name="SignUp" component={SignUp}/>
         <Auth.Screen name="Login" component={Login} />
-        <Auth.Screen name="Home" component={Home} />
         <Auth.Screen name="ForgotPassword" component={ForgotPassword} /> 
     </Auth.Navigator>
   )

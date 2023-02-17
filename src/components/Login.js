@@ -23,7 +23,7 @@ export default function Login({navigation}) {
           ) 
           setEmail('');
           setPassword('');
-          navigation.navigate(Home)
+          navigation.navigate("Drawer")
        }
 
        else{

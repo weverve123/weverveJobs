@@ -19,7 +19,9 @@ export default function App() {
    
    const RootNavigator =()=>{
      return(
-      <root.Navigator>
+      <root.Navigator  screenOptions={{
+        headerShown: false
+      }}>
         <root.Screen name='Auth' component={AuthStack}/>
         <root.Screen name='Drawer' component={DrawerNavigator}/>
      </root.Navigator>   
