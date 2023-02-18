@@ -12,6 +12,7 @@ import {
   import {xorBy} from 'lodash';
   import firestore from '@react-native-firebase/firestore';
   import auth, { firebase } from '@react-native-firebase/auth';
+import { clockRunning, log } from 'react-native-reanimated';
   
   export default function EditProfile({navigation}) {
     const [fname, setFname] = useState('');
@@ -25,7 +26,9 @@ import {
     const [selectedTeam, setSelectedTeam] = useState({});
     const [selectedTeams, setSelectedTeams] = useState([]);
     const [cureentUid,setCureentUid]=useState()
-  
+    const [docData,SetDocData]=useState();
+
+
     useEffect(()=>{
       getUser();
       getDatabase();
@@ -44,10 +47,12 @@ import {
       const ref =firestore().collection(cureentUid)
       return ref.onSnapshot(qurerySnapshot =>{
         const list=[]
-        console.log(qurerySnapshot,"qurerySnapshot")
+        // console.log("qurerySnapshot",qurerySnapshot[0])
         qurerySnapshot.forEach((doc)=>{
           const {fname,lname,mobno,address,college,qualification,experance,selectedTeam,selectedTeams}=doc.data()
         
+          console.log(doc.id); 
+          SetDocData(doc.id);
           setFname(fname);
           setLname(lname);
           setMobno(mobno);
@@ -94,10 +99,19 @@ import {
         setSelectedTeam({});
         setSelectedTeams([]);
          
-       await firestore().collection('cureentUid').update(UserData).then(ref =>{
+       await firestore().collection('cureentUid').doc(docData).update(UserData).then(ref =>{
          console.log(ref)
        })
-     
+
+      // const db = getFirestore();
+      // async (e) => { //...
+      //  await updateDoc(doc(db, "cureentUid", cureentUid), {
+      //     foo: 'bar'
+      //   });
+
+      // }
+
+          console.log("userData",UserData)
        }
        else{
          alert ("Plese enter the task  // id:doc.cureentUid,")  
