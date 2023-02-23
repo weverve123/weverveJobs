@@ -12,6 +12,9 @@ import SelectBox from 'react-native-multi-selectbox';
 import {xorBy} from 'lodash';
 import firestore from '@react-native-firebase/firestore';
 import auth, { firebase } from '@react-native-firebase/auth';
+import UserDocument from './UserDocument';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 export default function UserDetails({navigation}) {
   const [fname, setFname] = useState('');
@@ -133,7 +136,7 @@ export default function UserDetails({navigation}) {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <LinearGradient  colors={["#89b1d9","#89b1d9"]} style={styles.main}>
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
         showsVerticalScrollIndicator={false}
@@ -178,9 +181,9 @@ export default function UserDetails({navigation}) {
 
           <View style={styles.mobtext}>
             <TextInput
-              label="Adress"
+              label="Address"
               mode="outlined"
-              placeholder="Enter Your adress"
+              placeholder="Enter Your address"
               value={address}
               onChangeText={text => setAddress(text)}
             />
@@ -223,14 +226,14 @@ export default function UserDetails({navigation}) {
         </View>
 
         <View style={{top: 40, marginBottom: 10}}>
-          <Text style={styles.detailsHeading}>Experiance Details</Text>
+          <Text style={styles.detailsHeading}> Experience Details</Text>
         </View>
 
         <View style={{top: 30, left: 20}}>
           <TextInput
-            label="Year of Experance"
+            label="Year of Experience"
             mode="outlined"
-            placeholder="Enter the  year of Experance"
+            placeholder="Enter the  year of Experience"
             value={experance}
             onChangeText={text => setExpeance(text)}
             style={{top: 10, width: 300}}
@@ -259,15 +262,29 @@ export default function UserDetails({navigation}) {
           <TouchableOpacity
            onPress={()=>handleSubmit()}
           >
-            <View style={styles.submitbtn}>
+            {/* <View style={styles.submitbtn}> */}
+            <LinearGradient  colors={["#133454","#133454"]} style={styles.submitbtn}>
               <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
                 Submit Details
               </Text>
-            </View>
+              </LinearGradient>
+            {/* </View> */}
           </TouchableOpacity>
+
+          <TouchableOpacity
+           onPress={()=>navigation.navigate("UserDocument")}
+           style={{top:20,}}
+          >
+            <View style={styles.uplodebtn}>
+              <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+                Upload Document
+              </Text>
+            </View>
+          </TouchableOpacity> 
+
         </View>
       </ScrollView>
-    </View>
+   </LinearGradient>
   );
 }
 const styles = StyleSheet.create({
@@ -303,4 +320,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
   },
+  uplodebtn:{
+    height: 50,
+    width: 200,
+    bottom:10,
+    backgroundColor: 'purple',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  main:{
+    flex:1,
+    paddingBottom:50
+  }
 });

@@ -11,7 +11,7 @@ export default function Logout({navigation}) {
 
     const handleLogout=async()=>{
         try{ 
-            auth() .signOut().then(() => navigation.navigate("SignUp"));
+            auth().signOut().then(() => navigation.navigate("Auth"));
             alert("LogOut succssesfully done");
         }
 

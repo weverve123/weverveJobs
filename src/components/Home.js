@@ -60,7 +60,8 @@ export default function Home({navigation}) {
 
 
   return ( 
-    <View style={styles.main}>
+    // <View style={styles.main}>
+    <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>
        <View style={{top:10,marginBottom:20}}>
          <Text style={styles.heading}>Welcome to WeVerve {name}</Text>
         
@@ -71,7 +72,7 @@ export default function Home({navigation}) {
        <FlatList
          data={list}
          renderItem={({item})=>(
-          <LinearGradient colors={['#ec6f66', '#f3a183',]}style={styles.cards}>
+          <LinearGradient colors={["#89b1d9", '#89b1d9',]}style={styles.cards}>
          <View style={styles.cards}>
           <Text style={styles.jobrole}>{item.Jobrole}</Text>
           <Text style={styles.jd}>{item.Jd}</Text>
@@ -80,7 +81,7 @@ export default function Home({navigation}) {
           onPress={()=>handleApply()}
           >
              {/* <View style={styles.btn}> */}
-             <LinearGradient colors={['#2193b0', '#6dd5ed',]} style={styles.btn}>
+             <LinearGradient colors={['#2193b0', '#2193b0',]} style={styles.btn}>
               <Text style={styles.btntext}>Apply Now</Text>
 
               </LinearGradient>
@@ -96,7 +97,8 @@ export default function Home({navigation}) {
      </ScrollView>
        <View> 
        </View>
-    </View> 
+    {/* </View>  */}
+    </LinearGradient>
   )
 }
 
@@ -104,13 +106,15 @@ const styles = StyleSheet.create({
   main:{
      flex:1,
     // justifyContent:"center",
-     alignItems:"center"
+     alignItems:"center",
+     paddingBottom:60
+    //  marginBottom:50
   },
   heading:{
     fontSize:25,
     top:10,
     fontWeight:"bold",
-    color:"black"
+    color:"white"
   },
   cards:{
     height:220,

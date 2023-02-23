@@ -3,6 +3,8 @@ import React, { useState} from 'react'
 // import {sendPasswordResetEmail} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 // import auth from '@react-native-firebase/auth';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 export default function ForgotPassword({navigation}) {
     const[email,setEmail]=useState(""); 
@@ -31,7 +33,7 @@ export default function ForgotPassword({navigation}) {
   }
 
   return ( 
-    <View>
+    <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>
       <View style={{top:70}}> 
       <View style={{alignItems:"center",alignItems:"center"}}>
       <TextInput placeholder='Email' 
@@ -45,13 +47,13 @@ export default function ForgotPassword({navigation}) {
             >
                 <View style={{height:50,width:200,backgroundColor:"red",
                 justifyContent:"center",alignItems:"center",}}>
-                    <Text style={{fontSize:18,fontWeight:"bold",color:"white"}}>ForgotPassword</Text>
+                    <Text style={{fontSize:18,fontWeight:"bold",color:"white"}}>Forgot Password</Text>
                 </View>
             </TouchableOpacity>
         </View>
       </View>
     </View> 
-    </View>
+    </LinearGradient>
   )
 }
 
@@ -61,5 +63,8 @@ const styles = StyleSheet.create({
         backgroundColor:"#D3D3D3",
         height:40,
     
+    },
+    main:{
+      flex:1
     }
 });

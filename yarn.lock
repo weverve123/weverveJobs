@@ -1707,6 +1707,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-17.0.0.tgz"
   "version" "17.0.0"
 
+"@react-native-firebase/storage@^17.3.0":
+  "integrity" "sha512-SsnEirsL4Vi5quvi56iFBA5s3WSNYo2QPkoemR6C/XuF7FAkAD8JXVaVIfHJs2B3DKXn5KSHnbzIgsLWF4o0Xg=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-17.3.0.tgz"
+  "version" "17.3.0"
+
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
   "resolved" "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"
@@ -6283,6 +6288,13 @@
     "flow-parser" "^0.185.0"
     "jscodeshift" "^0.13.1"
     "nullthrows" "^1.1.1"
+
+"react-native-document-picker@^8.1.3":
+  "integrity" "sha512-lC+SZnzqIEE30x2CSHeZT+f7FzhQOTJprCNMRPpFVl4mLV9dDCJ/wZAmMByJFT79oQMPrzjlhhJlmjm+sVRUWQ=="
+  "resolved" "https://registry.npmjs.org/react-native-document-picker/-/react-native-document-picker-8.1.3.tgz"
+  "version" "8.1.3"
+  dependencies:
+    "invariant" "^2.2.4"
 
 "react-native-gesture-handler@^2.9.0":
   "integrity" "sha512-a0BcH3Qb1tgVqUutc6d3VuWQkI1AM3+fJx8dkxzZs9t06qA27QgURYFoklpabuWpsUTzuKRpxleykp25E8m7tg=="

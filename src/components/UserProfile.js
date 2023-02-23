@@ -2,7 +2,6 @@ import { View, Text,FlatList, TouchableOpacity,StyleSheet} from 'react-native'
 import React,{useState,useEffect} from 'react'
 import auth, { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import EditProfile from './EditProfile';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -17,6 +16,7 @@ export default function UserProfile({navigation}) {
      getUser();
 
   },[currentUid]);
+
 
   const getUser=()=>{
     const userData= firebase.auth().currentUser.uid
@@ -55,16 +55,15 @@ const getDatabase= async () =>{
   }
 }
   return (
-   <View style={styles.main}>
-      
+    <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>    
       <FlatList
            data={list}
            renderItem={({item})=>
            <View>
-              <LinearGradient  colors={['#72FFB6', '#10D164',]} style={styles.mainCard}>
+              <LinearGradient  colors={['#5b98d4', '#5b98d4',]} style={styles.mainCard}>
               <View style={styles.innerCard}>
                 <View style={{height:50,width:300,bottom:20}}>
-                  <Text style={{fontSize:30,fontWeight:"bold",color:"black"}}>  Welcome
+                  <Text style={{fontSize:30,fontWeight:"bold",color:"white"}}>  Welcome
                   <Text> {item.fname}</Text>
                   </Text>
                 </View>
@@ -105,10 +104,9 @@ const getDatabase= async () =>{
             <TouchableOpacity
             onPress={()=>navigation.navigate(EditProfile)}
             >
-               <View style={{height:50,width:200,backgroundColor:"#3899ac",
-               justifyContent:"center",alignItems:"center",borderRadius:20}}>
+                <LinearGradient  colors={['#275f96', '#275f96',]} style={styles.btnEdit}>
                  <Text style={{fontSize:22,fontWeight:"bold",color:"white",}}>Edit Information</Text>
-               </View>
+                 </LinearGradient>
                </TouchableOpacity>
           </View>
           </LinearGradient> 
@@ -117,14 +115,13 @@ const getDatabase= async () =>{
           }
           keyExtractor={item => item.id}
         />
-       
-   </View>
+    </LinearGradient>   
 
   )
 }
 const styles = StyleSheet.create({
   mainCard:{
-    height:700,width:350,
+    height:650,width:350,
     // justifyContent:"center",
     alignItems:"center",
     // backgroundColor:"orange",
@@ -135,7 +132,7 @@ const styles = StyleSheet.create({
     elevation: 8,
     shadowColor: 'blue',
     shadowOffset: { width: 5, height: 5 },
-    shadowOpacity: 0.56,
+    shadowOpacity: 10.56,
 
   },
   tag:{
@@ -147,6 +144,17 @@ const styles = StyleSheet.create({
     fontSize:25,
     fontWeight:"bold",
     color:"black"
+  },
+  main:{
+    flex:1
+  },
+  btnEdit:{
+    height:50,
+    width:200,
+    backgroundColor:"#3899ac",
+    justifyContent:"center",
+    alignItems:"center",
+    borderRadius:20
   }
   
 })

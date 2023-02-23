@@ -12,8 +12,10 @@ import {
   import {xorBy} from 'lodash';
   import firestore from '@react-native-firebase/firestore';
   import auth, { firebase } from '@react-native-firebase/auth';
-import { clockRunning, log } from 'react-native-reanimated';
-  
+  import { clockRunning, log } from 'react-native-reanimated';
+  import LinearGradient from 'react-native-linear-gradient';
+
+
   export default function EditProfile({navigation}) {
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
@@ -209,7 +211,8 @@ import { clockRunning, log } from 'react-native-reanimated';
     }
   
     return (
-      <View style={{flex: 1}}>
+      // <View style={{flex: 1}}>
+      <LinearGradient  colors={["#89b1d9","#89b1d9"]} style={styles.main}>
         <ScrollView
           contentContainerStyle={{flexGrow: 1}}
           showsVerticalScrollIndicator={false}
@@ -299,14 +302,14 @@ import { clockRunning, log } from 'react-native-reanimated';
           </View>
   
           <View style={{top: 40, marginBottom: 10}}>
-            <Text style={styles.detailsHeading}>Experiance Details</Text>
+            <Text style={styles.detailsHeading}>Experience Details</Text>
           </View>
   
           <View style={{top: 30, left: 20}}>
             <TextInput
-              label="Year of Experance"
+              label="Year of Experience"
               mode="outlined"
-              placeholder="Enter the  year of Experance"
+              placeholder="Enter the  year of Experience"
               value={experance}
               onChangeText={text => setExpeance(text)}
               style={{top: 10, width: 300}}
@@ -335,15 +338,16 @@ import { clockRunning, log } from 'react-native-reanimated';
             <TouchableOpacity
              onPress={()=>handleUpdate()}
             >
-              <View style={styles.submitbtn}>
+                <LinearGradient  colors={["#133454","#133454"]} style={styles.submitbtn}>
                 <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
                   Update Details
                 </Text>
-              </View>
+                </LinearGradient>
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </View>
+      {/* </View> */}
+      </LinearGradient>
     );
   }
   const styles = StyleSheet.create({
@@ -379,5 +383,9 @@ import { clockRunning, log } from 'react-native-reanimated';
       alignItems: 'center',
       borderRadius: 20,
     },
+    main:{
+      paddingBottom:50
+    }
+
   });
   

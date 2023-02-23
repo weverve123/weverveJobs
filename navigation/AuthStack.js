@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Login from '../src/components/Login';
 import SignUp from '../src/components/SignUp';
 import Logout from '../src/components/Logout';
@@ -11,14 +11,27 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../src/components/Home';
 import AppStack from './AppStack';
 
+
 const Auth =createNativeStackNavigator();
 
 export default function AuthStack() {
+  
   return (
     <Auth.Navigator>
-        <Auth.Screen name="SignUp" component={SignUp}/>
-        <Auth.Screen name="Login" component={Login} />
-        <Auth.Screen name="ForgotPassword" component={ForgotPassword} /> 
+     
+        <Auth.Screen name="SignUp" component={SignUp}
+        options={{headerShown:false}}
+        />
+
+        <Auth.Screen name="Login" component={Login}
+         options={{headerShown:false}}
+        />
+
+        <Auth.Screen name="ForgotPassword" component={ForgotPassword}
+          options={{headerShown:false}}
+        />
+         
+        {/* <Auth.Screen name="Logout" component={Logout} /> */}
     </Auth.Navigator>
   )
 }

@@ -3,7 +3,9 @@ import React, { useState } from 'react'
 // import SignIn from './SignIn'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
- import Login from './Login';
+import Login from './Login';
+import LinearGradient from 'react-native-linear-gradient';
+
 export default function SignUp({navigation}) {
 
     const [name,setName]=useState("")
@@ -45,7 +47,8 @@ export default function SignUp({navigation}) {
       
     }
   return (
-    <View style={styles.main}>
+    // <View style={styles.main}>
+    <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>
        <View>
         <Text style={styles.heading}>SignUp</Text>
        </View>
@@ -83,11 +86,11 @@ export default function SignUp({navigation}) {
         // onPress={()=>navigation.navigate(SignUp)}  
        >
          <View style={{marginTop:20}}>
-            <Text style={{fontSize:20,color:"black"}}>Login</Text>
+            <Text style={{fontSize:20,color:"white"}}>Login</Text>
          </View>
        </TouchableOpacity>
-    </View>
-  
+    {/* </View> */}
+    </LinearGradient>
   )
 }
 
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
     heading:{
         fontSize:30,
         fontWeight:'bold',
-        color:"black",
+        color:"white",
         bottom:30
     }
 });

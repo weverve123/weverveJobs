@@ -4,7 +4,7 @@ import SignUp from './SignUp';
 import auth from '@react-native-firebase/auth';
 import Home from './Home';
 import ForgotPassword from './ForgotPassword';
-
+import LinearGradient from 'react-native-linear-gradient';
 // import AuthStack from '../../navigation/AuthStack';
 export default function Login({navigation}) {
 
@@ -38,7 +38,8 @@ export default function Login({navigation}) {
        }
     }
   return (
-    <View style={styles.main}>
+    // <View style={styles.main}>
+        <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>
        <View>
         <Text style={styles.heading}>Login</Text>
        </View>
@@ -69,7 +70,7 @@ export default function Login({navigation}) {
          onPress={()=>navigation.navigate(ForgotPassword)}
        >
          <View style={{marginTop:20}}>
-            <Text style={{fontSize:17,color:"#0D324D",fontWeight:'bold'}}>ForgotPassword</Text>
+            <Text style={{fontSize:17,color:"#FFCCCB",fontWeight:'bold'}}>ForgotPassword</Text>
          </View>
        </TouchableOpacity>
 
@@ -77,11 +78,11 @@ export default function Login({navigation}) {
        onPress={()=>navigation.navigate(SignUp)}
        >
          <View style={{marginTop:20}}>
-            <Text style={{fontSize:17,fontWeight:'bold',color:"#0000FF"}}>If You Wont to Add New User ?</Text>
+            <Text style={{fontSize:17,fontWeight:'bold',color:"white"}}>If You Woant to Add New User ?</Text>
          </View>
        </TouchableOpacity>
-
-    </View>
+       </LinearGradient>
+    // </View>
   
   )
 }
@@ -90,7 +91,8 @@ const styles = StyleSheet.create({
     main:{
         flex:1,
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+        // backgroundColor:"#ececec"
     },
     input:{
         width:320,
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
     heading:{
         fontSize:30,
         fontWeight:'bold',
-        color:"black",
+        color:"white",
         bottom:30
     }
 });

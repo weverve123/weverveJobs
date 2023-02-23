@@ -13,14 +13,21 @@ const Tab = createBottomTabNavigator();
 export default function TabStack({}) {
   return (
     <Tab.Navigator
-    screenOptions={{headerShown:false}}
+    screenOptions={{headerShown:false,
+      tabBarStyle: { position: 'absolute',backgroundColor:"#2c3e50",height:53,margin:5,padding:2},
+      tabBarActiveTintColor:"red",
+    }}
+   
     >
         <Tab.Screen name='Home' component={AppStack} 
           options={{
             tabBarLabel: 'Home',
             headerShown:false,
+          
             tabBarIcon: () => (
-                <AntDesign name="home" color={"red"} size={35} />
+               <View>
+                <AntDesign name="home" color={"white"} size={30} />
+                </View>
             ) }}          
         />
       
@@ -29,7 +36,7 @@ export default function TabStack({}) {
             tabBarLabel: 'UserProfile',
             headerShown:false,
             tabBarIcon: () => (
-                <Entypo name="user" color={"red"} size={35} />
+                <Entypo name="user" color={"white"} size={30} />
             ) }}          
         />
       
@@ -38,7 +45,7 @@ export default function TabStack({}) {
             tabBarLabel: 'Logout',
             headerShown:false,
             tabBarIcon: () => (
-                <Entypo name="log-out" color={"red"} size={35} />
+                <Entypo name="log-out" color={"white"} size={30} />
             ) }}          
         />
       
