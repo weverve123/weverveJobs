@@ -30,12 +30,10 @@ export default function App() {
    const RootNavigator =()=>{
     
      return(
-      <root.Navigator  screenOptions={{
+      <root.Navigator initialRouteName={!isUserLogin ? "Auth":"Drawer"} screenOptions={{
         headerShown: false
       }}>
-        {/* {!isUserLogin ?(<root.Screen name='Auth' component={AuthStack}/>
-        ):<root.Screen name='Drawer' component={DrawerNavigator}/>
-        } */}
+      
         <root.Screen name='Auth' component={AuthStack}/>
         <root.Screen name='Drawer' component={DrawerNavigator}/>
      </root.Navigator>   

@@ -1,4 +1,4 @@
-import { View, Text ,StyleSheet, FlatList, TouchableOpacity, ScrollView} from 'react-native'
+import { View, Text ,StyleSheet, FlatList, TouchableOpacity, ScrollView,StatusBar} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import auth, { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -6,6 +6,8 @@ import jobs from './Jobs';
 import UserDetails from './UserDetails';
 // import { color } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
+import EvilIcons from "react-native-vector-icons/EvilIcons"
+import Ionicons from "react-native-vector-icons/Ionicons"
 
 export default function Home({navigation}) {
 
@@ -40,11 +42,14 @@ export default function Home({navigation}) {
         const list=[]
         console.log(qurerySnapshot,"qurerySnapshot")
         qurerySnapshot.forEach((doc)=>{
-          const {Jd,Jobrole}=doc.data()
+          const {Jd,Jobrole,Location,JobType,Skills}=doc.data()
           list.push({
             id:doc.id,
             Jd,
-            Jobrole
+            Jobrole,
+            Location,
+            JobType,
+            Skills
           })
          
           setList(list)
@@ -61,23 +66,60 @@ export default function Home({navigation}) {
 
   return ( 
     // <View style={styles.main}>
-    <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>
-       <View style={{top:10,marginBottom:20}}>
-         <Text style={styles.heading}>Welcome to WeVerve {name}</Text>
-        
-       </View>
+    <LinearGradient  colors={['#E6E6FA',"#E6E6FA"]} style={styles.main}>
+        <StatusBar translucent backgroundColor='transparent'  barStyle="dark-content" />
+
+       {/* <View style={{top:10,marginBottom:20}}>
+         <Text style={styles.heading}>Welcome to WeVerve {name}</Text> 
+       </View> */}
+
+
        <ScrollView showsVerticalScrollIndicator={false}>
        <View style={{top:20,}}>
  
        <FlatList
          data={list}
          renderItem={({item})=>(
-          <LinearGradient colors={["#89b1d9", '#89b1d9',]}style={styles.cards}>
-         <View style={styles.cards}>
+          // <LinearGradient colors={["#89b1d9", '#89b1d9',]}style={styles.cards}>
+          <LinearGradient colors={["white", 'white',]}style={{marginBottom:20,borderRadius:10,justifyContent:"flex-start"}}>
+         {/* <View style={styles.cards}> */}
+         <View style={{justifyContent:"center",alignItems:"center"}}>
           <Text style={styles.jobrole}>{item.Jobrole}</Text>
-          <Text style={styles.jd}>{item.Jd}</Text>
+          </View>
 
-          <TouchableOpacity style={{bottom:5}}
+         <View style={{flexDirection:"row",top:10,marginBottom:10,}}>
+         <View>
+          <EvilIcons name="location" size={30} color={"red"}/> 
+          </View> 
+          {/* <Text style={{right:60, fontSize:16,color:"black"}}>{item.Location}</Text>  */}
+          <View>
+             <Text style={{fontSize:16,color:"black"}}>{item.Location}</Text>
+          </View>
+
+          </View> 
+
+          <View style={{flexDirection:"row",top:10,marginBottom:10,left:4}}>
+
+             <View>
+               <Ionicons name='ios-briefcase-outline'size={20} color={"red"}/>
+             </View>
+             <View style={{left:7}}>
+               <Text style={{fontSize:16,color:"black"}}>{item.JobType}</Text>
+             </View>
+
+          </View>
+
+          <View style={{justifyContent:"flex-start"}}>
+          <Text style={{fontSize:16,color:"black",top:10,left:10}}>Skills- {item.Skills} </Text>
+           
+          </View>
+
+         <View style={{justifyContent:"center",alignItems:"center",padding:20,}}>
+          <Text style={{color:"black"}}>{item.Jd}</Text>
+        </View>
+         
+         <View style={{justifyContent:"center",alignItems:"center"}}>
+          <TouchableOpacity style={{marginBottom:20}}
           onPress={()=>handleApply()}
           >
              {/* <View style={styles.btn}> */}
@@ -87,7 +129,8 @@ export default function Home({navigation}) {
               </LinearGradient>
              {/* </View> */}
           </TouchableOpacity>
-         </View> 
+          </View>
+         {/* </View>  */}
          </LinearGradient>
        )
       } 
@@ -107,28 +150,34 @@ const styles = StyleSheet.create({
      flex:1,
     // justifyContent:"center",
      alignItems:"center",
-     paddingBottom:60
-    //  marginBottom:50
+     paddingBottom:80,
+     paddingTop:40,
+    padding:20
+    
   },
   heading:{
     fontSize:25,
-    top:10,
+    marginTop:30,
     fontWeight:"bold",
-    color:"white"
+    color:"black"
   },
   cards:{
-    height:220,
-    width:350,
+    // height:350,
+    width:340,
     marginBottom:30,
-    // backgroundColor:"#66CDAA",
+    // alignSelf:"flex-start",
     alignItems:"center",
-    borderRadius:20,
-
+    justifyContent:"center"
+     
+    // elevation: 8,
+    // shadowColor: 'blue',
+    // shadowOffset: { width: 5, height: 5 },
+    // shadowOpacity: 10.56,
 
   },
   btn:{
     top:10,
-    bottom:20,
+    bottom:10,
     height:50,
     justifyContent:"center",
     alignItems:"center",
@@ -147,13 +196,14 @@ const styles = StyleSheet.create({
     fontSize:30,
     fontWeight:"bold",
     fontFamily:'NotoSans',
-    color:"white"
+    color:"black",
+    
   },
-  jd:{
-    fontSize:15,
-    fontWeight:"bold",
-    padding:5,
-    color:"black"
-  }
-
+  // jd:{
+  //   fontSize:15,
+  //   fontWeight:"bold",
+  //   padding:5,
+  //   color:"green",
+  //   fontFamily:"Poppins-Italic"
+  // }
 })

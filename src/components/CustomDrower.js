@@ -6,6 +6,9 @@ import storage from '@react-native-firebase/storage';
 import Auth, { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Entypo from "react-native-vector-icons/Entypo"
+import Login from './Login';
+import AuthStack from '../../navigation/AuthStack';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function CustomDrower(props) {
@@ -17,31 +20,29 @@ export default function CustomDrower(props) {
      getUser();
     //  console.log(imageUrl); 
   },[])
-  
-  // useEffect(() => {
-  //   const storage = firebase.storage();
-  //   const storageRef = storage.ref();
-  //   const imageRef = storageRef.child(`/profile/userImage/${currentUid}`);
-  //   imageRef.getDownloadURL().then((url) => {
-  //     setImageUrl(url);
-  //     console.log(url);
-  //   });
-  // }, []);
 
-   useEffect( async()=>{
-    const url = await storage()
-    .ref(`/profile/userImage/${currentUid}`)
-    .getDownloadURL()
-    console.log("url",url)
-    // setImageUrl(url);
-   },[])
+
+  useEffect(()=>{
+    UplodeImage();
+  },[docData])
+  
+
+  useEffect(() => {
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const imageRef = storageRef.child(`/profile/userImage/${currentUid}`);
+    imageRef.getDownloadURL().then((url) => {
+      setImageUrl(url);
+      console.log(url);
+    });
+  }, [currentUid]);
 
   
   const getUser=()=>{
     const userData= Auth().currentUser.uid
     setCurrentUid(userData); 
     // console.log(userData);
-    UplodeImage();
+    // 
   }
 
   const PicDocument= async()=>{
@@ -83,28 +84,51 @@ async function UplodeImage() {
   }
 }
    
-  return (
-    <View style={{flex:1,backgroundColor:"#eab6fa"}}>
-      
-      <View style={styles.mainAvtar}>
-      {/* <Image  source={{uri:docData.uri}} style={styles.avtar} /> */}
-      <View style={{}}>
-      {/* <Entypo name="edit" color={"red"} size={20} style={{top:120,left:100}}
-       onPress={() =>PicDocument()}/> */}
+const navigation = useNavigation();
 
-       {/* <Image source={{uri:docData.uri}} style={{height:120,width:120,borderRadius:60}} /> */}
-       <Image style={{height:120,width:120}} source={{uri: imageUrl}}/>
-      </View>
-      </View>
+const handleLogout=async()=>{
+  try{ 
+     await Auth().signOut().then(() => navigation.replace("Auth"));
+      alert("LogOut succssesfully done");
+  }
+
+  catch(err)
+  {
+     console.log(err)
+  }
+}
+   
+  return (
+    <View style={{flex:1,backgroundColor:"#EBF6F7"}}>
+      
+      <TouchableOpacity
+        onPress={()=>PicDocument()}
+      >
+       <Image style={styles.avtar} source={{uri: imageUrl}}/>
+
+       </TouchableOpacity>
+
       <DrawerContentScrollView {...props}
-      contentContainerStyle={{backgroundColor:'#f9b6fa'}}
+      // contentContainerStyle={{backgroundColor:'#E6E6FA'}}
       >
     <View style={{padding:10,}}>
       <DrawerItemList {...props}/>
      </View> 
      
      </DrawerContentScrollView>
-   
+
+    <TouchableOpacity onPress={()=>handleLogout()}>
+    <View style={{bottom:30,flexDirection:'row',justifyContent:"flex-start"}}>
+    <View style={{left:30}}> 
+      <Entypo name="log-out" size={25} color="#11a7bd" />
+      </View>
+
+      <View>
+      <Text style={{fontWeight:'bold',color:"black",fontSize:15,left:50}}>Logout</Text>
+      </View>
+      
+    </View>
+    </TouchableOpacity>
    </View>
   )
 }
@@ -115,11 +139,12 @@ const styles = StyleSheet.create({
       alignItems:"center"
     },
     avtar:{
-      height:120,width:120,
+      height:120,
+      width:120,
       borderRadius:60,
-      marginTop:20,
+      left:70,
+      marginTop:30,
       borderWidth:2,
-      justifyContent:"center",
-      marginBottom:30
+      borderColor:"black"
     }
 })

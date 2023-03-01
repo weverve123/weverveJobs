@@ -11,7 +11,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../src/components/Home';
 import AppStack from './AppStack';
 
-
 const Auth =createNativeStackNavigator();
 
 export default function AuthStack() {

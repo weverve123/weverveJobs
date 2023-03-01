@@ -4,6 +4,10 @@ import auth, { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import EditProfile from './EditProfile';
 import LinearGradient from 'react-native-linear-gradient';
+import Feather from "react-native-vector-icons/Feather";
+import AntDesign from "react-native-vector-icons/AntDesign"
+import FontAwesome from "react-native-vector-icons/FontAwesome"
+
 
 export default function UserProfile({navigation}) {
 
@@ -11,12 +15,10 @@ export default function UserProfile({navigation}) {
   const [list,setList]=useState();
 
   useEffect(()=>{
-
     getDatabase();
      getUser();
 
   },[currentUid]);
-
 
   const getUser=()=>{
     const userData= firebase.auth().currentUser.uid
@@ -31,7 +33,16 @@ const getDatabase= async () =>{
       const list=[]
       console.log(qurerySnapshot,"qurerySnapshot")
       qurerySnapshot.forEach((doc)=>{
-        const {fname,lname,mobno,address,college,qualification,experance,}=doc.data()
+        const {fname,lname,mobno,address,college,qualification,experance,selectedTeam,selectedTeams}=doc.data()
+        
+        const newselectedTeam=JSON.stringify(selectedTeam.item);
+
+        // const newselectedTeams=JSON.stringify(selectedTeams);
+         
+        let skills = selectedTeams.map(function(item) {
+          return ` ${item ['item']} ,`
+        });
+         
         list.push({
           id:doc.id,
           fname,
@@ -41,8 +52,8 @@ const getDatabase= async () =>{
           college,
           qualification,
           experance,
-          // selectedTeam,
-          // selectedTeams
+           skills,
+          newselectedTeam
         })
         setList(list)
       }     
@@ -55,52 +66,104 @@ const getDatabase= async () =>{
   }
 }
   return (
-    <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>    
+    <LinearGradient  colors={['#E6E6FA',"#E6E6FA"]} style={styles.main}>    
       <FlatList
            data={list}
            renderItem={({item})=>
            <View>
-              <LinearGradient  colors={['#5b98d4', '#5b98d4',]} style={styles.mainCard}>
+              <LinearGradient  colors={['white', 'white',]} style={styles.mainCard}>
               <View style={styles.innerCard}>
                 <View style={{height:50,width:300,bottom:20}}>
-                  <Text style={{fontSize:30,fontWeight:"bold",color:"white"}}>  Welcome
+                  <Text style={{fontSize:30,fontWeight:"bold",color:"black"}}>  Welcome
                   <Text> {item.fname}</Text>
                   </Text>
                 </View>
+             
+             <View style={{justifyContent:"space-between"}}>
+                <View>
+                  
                 <Text style={styles.data}>
-                  <Text style={styles.tag}>First Name : </Text>
-                  {item.fname}
+                  {/* <Text style={styles.tag}>First Name  : </Text> */}
+                  {item.fname}{item.lname}
                   </Text>
-
-                <Text style={styles.data}>
-                  <Text style={styles.tag}>Last Name : </Text>
-                  {item.lname}</Text>
-
-                <Text style={styles.data}>
-                  <Text style={styles.tag}>Contact No : </Text>
+                  </View>
+                
+                <View style={{justifyContent:"flex-start",flexDirection:"row",paddingTop:10}}>  
+                  <View>
+                    <Feather name="phone" size={25} color={"green"}/> 
+                  </View>
+                    <Text style={{fontSize:20,color:"black",left:20}}> 
                   {item.mobno}</Text>
+                 </View> 
+                 
 
-                <Text style={styles.data}>
-                <Text style={styles.tag}>Address: </Text>
-                  {item.address}</Text>
+                <View style={{justifyContent:"flex-start",flexDirection:"row",paddingTop:10}}>
+                   <View>
+                     <AntDesign name="home" size={25} color={"green"}/> 
+                   </View>
+                    <View>
+                         <Text style={{fontSize:20,color:"black",left:20}}>{item.address}</Text>
+                   </View>
+                 </View>
 
-                <Text style={styles.data}>
-                <Text style={styles.tag}>College Name: </Text>
-                  {item.college}</Text>
+              <View style={{justifyContent:"flex-start",flexDirection:"row",paddingTop:10}}>
+                  <View>
+                     <FontAwesome name="university" size={25} color={"green"}/> 
+                  </View>
+                 <View>
+                    <Text style={{fontSize:20,color:"black",left:10}}>{item.college}</Text>
+                  </View>
+              </View>
 
-                <Text style={styles.data}>
-                <Text style={styles.tag}>Qualification: </Text>
-                  {item.qualification}</Text>
+              <View style={{justifyContent:"flex-start",flexDirection:"row",paddingTop:10}}>
+                 <View >
+                 <FontAwesome name="graduation-cap" size={25} color={"green"}/> 
+                 </View>
+                <View>
+                <Text style={{fontSize:20,color:"black",left:10}}> {item.qualification}</Text>
+                </View> 
+              </View>
 
-                <Text style={styles.data}>
-                <Text style={styles.tag}>Experance: </Text>
-                  {item.experance}
-                  </Text>
-                {/* <Text>{item.selectedTeam}</Text>
-                <Text>{item.selectedTeams}</Text> */}
+               
+              <View style={{flexDirection:"row",padding:5}}>
+                <View>
+                  <Text style={{fontSize:20,color:"black"}}>Year of passing :</Text> 
+                </View>
+              <View>
+               <Text style={{fontSize:20,color:"black",left:10}}>
+                  {item.newselectedTeam}
+                </Text>
+               </View> 
+              </View> 
+
+
+               <View style={{flexDirection:"row",padding:5}}>
+                <View>
+                  <Text style={{fontSize:20,color:"black"}}>Year of Experance : </Text>
+                </View>
+                   <View>
+                      <Text style={{fontSize:20,color:"black"}}> {item.experance}</Text>
+                   </View>
+                </View>
+              
+        
+              <View  style={{flexDirection:"row",padding:5}}>
+
+                <View>
+                  <Text  style={{fontSize:20,color:"black"}}>Skills : </Text>
+                </View>
+
+                <View>
+                   <Text style={{fontSize:20,color:"black"}}>{item.skills}</Text>
+                </View>
+              
+              </View>
+              
+              </View>
+
               </View>
             
-          <View style={{top:200}}>
+          <View style={{top:80}}>
             <TouchableOpacity
             onPress={()=>navigation.navigate(EditProfile)}
             >
@@ -128,10 +191,11 @@ const styles = StyleSheet.create({
     margin:20,
     borderRadius:40,
     paddingTop:50,
+    marginTop:50,
 
     elevation: 8,
-    shadowColor: 'blue',
-    shadowOffset: { width: 5, height: 5 },
+    shadowColor: 'black',
+    shadowOffset: { width: 10, height: 5 },
     shadowOpacity: 10.56,
 
   },
@@ -142,7 +206,7 @@ const styles = StyleSheet.create({
   },
   data:{
     fontSize:25,
-    fontWeight:"bold",
+    // fontWeight:"bold",
     color:"black"
   },
   main:{
@@ -155,6 +219,14 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     alignItems:"center",
     borderRadius:20
+  },
+  personalMain:{
+    width:320,
+    justifyContent:"center",
+    alignItems:"center",
+    padding:15,
+    borderRadius:20,
+    marginBottom:20
   }
   
 })

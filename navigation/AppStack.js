@@ -25,7 +25,7 @@ export default function AppStack() {
          options={{
           title:"User Details",
           headerStyle: {
-            backgroundColor: '#89b1d9'
+            backgroundColor: '#8ecae6'
           },
 
          }}
@@ -34,7 +34,7 @@ export default function AppStack() {
           options={{
             title:"Edit Profile",
             headerStyle: {
-              backgroundColor: '#89b1d9'
+              backgroundColor: '#8ecae6'
             },
   
            }}

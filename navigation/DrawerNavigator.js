@@ -4,23 +4,21 @@ import CustomDrower from '../src/components/CustomDrower';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AppStack from './AppStack';
 import TabStack from './TabStack';
-import Logout from '../src/components/Logout';
+// import Logout from '../src/components/Logout';
 import Contact from '../src/components/Contact';
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
 const Drawer = createDrawerNavigator();
 
-export default function DrawerNavigator() {
-
-
+export default function DrawerNavigator({navigation}) {
 
   return (
     <Drawer.Navigator  drawerContent={props =><CustomDrower {...props}/>}
       screenOptions={{
         headerShown:false,
-        drawerActiveBackgroundColor:'#aa18ea',
-        drawerActiveTintColor:'#fff',
+        drawerActiveBackgroundColor:'#99FFFF',
+        drawerActiveTintColor:'black',
         drawerInactiveTintColor:'#333'
       }}
      >
@@ -46,7 +44,7 @@ export default function DrawerNavigator() {
             }}   
          /> 
 
-         <Drawer.Screen name='Logout' component={Logout}   
+         {/* <Drawer.Screen name='Logout' component={Logout}   
             options={{
               drawerIcon: () => (
                 <View>
@@ -54,7 +52,7 @@ export default function DrawerNavigator() {
                  </View>   
               ),
             }}
-         />  
+         />   */}
      </Drawer.Navigator>
   )
 }

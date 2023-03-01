@@ -10,11 +10,10 @@ import {
   import React, {useEffect, useState} from 'react';
   import SelectBox from 'react-native-multi-selectbox';
   import {xorBy} from 'lodash';
-  import firestore from '@react-native-firebase/firestore';
-  import auth, { firebase } from '@react-native-firebase/auth';
   import { clockRunning, log } from 'react-native-reanimated';
   import LinearGradient from 'react-native-linear-gradient';
-
+  import firestore from '@react-native-firebase/firestore';
+  import auth, { firebase } from '@react-native-firebase/auth';
 
   export default function EditProfile({navigation}) {
     const [fname, setFname] = useState('');
@@ -29,7 +28,7 @@ import {
     const [selectedTeams, setSelectedTeams] = useState([]);
     const [cureentUid,setCureentUid]=useState()
     const [docData,SetDocData]=useState();
-
+    
 
     useEffect(()=>{
       getUser();
@@ -42,7 +41,7 @@ import {
     //  console.log(userData);
      setCureentUid(userData);
   }  
-
+   
   
   const getDatabase= async () =>{
     try {
@@ -51,9 +50,11 @@ import {
         const list=[]
         // console.log("qurerySnapshot",qurerySnapshot[0])
         qurerySnapshot.forEach((doc)=>{
+         
           const {fname,lname,mobno,address,college,qualification,experance,selectedTeam,selectedTeams}=doc.data()
         
-          console.log(doc.id); 
+          // console.log(doc.id); 
+         
           SetDocData(doc.id);
           setFname(fname);
           setLname(lname);
@@ -80,7 +81,7 @@ import {
        if(fname.length >0 )
        {
          const UserData={
-           id:cureentUid,
+          //  id:cureentUid,
            fname:fname,
            lname:lname,
            mobno:mobno,
@@ -101,19 +102,21 @@ import {
         setSelectedTeam({});
         setSelectedTeams([]);
          
-       await firestore().collection('cureentUid').doc(docData).update(UserData).then(ref =>{
-         console.log(ref)
+        console.log("userData",UserData);
+
+        // const res = await cityRef.set({
+        //   capital: true
+        // }, { merge: true });
+
+       await firestore().collection('cureentUid').doc(docData).update(UserData).then(() =>{
+         console.log('Data Is Updated..')
        })
 
-      // const db = getFirestore();
-      // async (e) => { //...
-      //  await updateDoc(doc(db, "cureentUid", cureentUid), {
-      //     foo: 'bar'
-      //   });
+        // var FirbaseData= firestore().collection('cureentUid').doc(docData);
+        //   await FirbaseData.update(UserData).then(()=>{
+        //   console.log('Data is Updated..')
+        //  })
 
-      // }
-
-          console.log("userData",UserData)
        }
        else{
          alert ("Plese enter the task  // id:doc.cureentUid,")  
@@ -124,37 +127,6 @@ import {
       }
    }
    
-//  const hadleSave=async()=>{
-
-//     console.log("This is save");  
-    
-//     try {   
-//      if(task.length >0)
-//      {
-//        const TodoData ={
-//          id:cureentUid,
-//          task:task
-//       }   
-//       setTask('');
-        
-//      await firestore().collection(cureentUid).doc(updateUid).update(TodoData)
-//      .then(ref =>{
-      
-//      })
-     
-//      }
-//      else{
-//        alert ("Plese enter the task  // id:doc.cureentUid,")  
-//      }
-//      } 
-    
-//      catch (error) {
-//        console.log("error");
- 
-//     }
-//  }
-
-
 
     const Year = [
       {

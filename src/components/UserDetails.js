@@ -27,7 +27,8 @@ export default function UserDetails({navigation}) {
   
   const [selectedTeam, setSelectedTeam] = useState({});
   const [selectedTeams, setSelectedTeams] = useState([]);
-  const [cureentUid,setCureentUid]=useState()
+  const [cureentUid,setCureentUid]=useState();
+  const [dataAvailable,setDataAvailable]=useState();
 
   useEffect(()=>{
     getUser();
@@ -41,9 +42,43 @@ export default function UserDetails({navigation}) {
    setCureentUid(userData);
 }  
 
+const getDatabase= async () =>{
+  try {
+    const ref =firestore().collection(cureentUid)
+    return ref.onSnapshot(qurerySnapshot =>{
+      const list=[]
+      // console.log("qurerySnapshot",qurerySnapshot[0])
+      qurerySnapshot.forEach((doc)=>{
+       
+        const {fname}=doc.data()
+      
+        // console.log(doc.id); 
+        setDataAvailable(fname);
+        // setLname(lname);
+        
+        // setMobno(mobno);
+        // setAddress(address);
+        // setCollege(college);
+        // setExpeance(experance);
+        // Setqualification(qualification);
+        // setSelectedTeam(selectedTeam);
+        // setSelectedTeams(selectedTeams);
+      }     
+      )
+     
+    }) 
+     
+  } catch (error) {
+    console.log(error);
+  }
+}  
+
+
+
   const handleSubmit=async()=>{      
     try {   
-     if(fname.length >0 )
+     if(fname.length && lname.length && mobno.length && mobno.length && address.length &&
+       college.length && qualification.length && experance.length > 0)
      {
        const UserData={
          id:cureentUid,
@@ -259,6 +294,7 @@ export default function UserDetails({navigation}) {
             marginBottom: 30,
           }}
         >
+          {}
           <TouchableOpacity
            onPress={()=>handleSubmit()}
           >
@@ -331,6 +367,6 @@ const styles = StyleSheet.create({
   },
   main:{
     flex:1,
-    paddingBottom:50
+    paddingBottom:70
   }
 });

@@ -10,18 +10,33 @@ export default function UserDocument() {
 
 const [docData,setDocData]=useState(''); 
 const [currentUid,setCureentUid]=useState();
+const [docUrl,setDocUrl]=useState();
+const [docName,setDocName]=useState();
 
-//  useEffect=(()=>{
-//    getUser();
-//  },[]) 
+useEffect(()=>{
+//  PicDocument();
+   getUser();
 
+},[currentUid]);
 
+ 
+useEffect(() => {
+  const storage = firebase.storage();
+  const storageRef = storage.ref();
+  const imageRef = storageRef.child(`/profile/resume/${currentUid}`);
+  imageRef.getDownloadURL().then((url) => {
+    setDocUrl(url);
+    console.log(" This is doc name",url);
+  });
+}, [currentUid]);
+ 
 
-// const getUser=()=>{
-//     const userData= Auth().currentUser.uid
-//     setCureentUid(userData);  
-//    console.log(currentUid);
-// }  
+const getUser=()=>{
+  const userData= firebase.auth().currentUser.uid
+  setCureentUid(userData);  
+//  console.log(userData);
+}  
+
 
     const PicDocument= async()=>{
         try {
@@ -65,9 +80,11 @@ const [currentUid,setCureentUid]=useState();
         // Get the selected document
         const { uri, name,fileCopyUri} = docData;
       
+        setDocName=name;
         // Create a reference to the location where the document will be saved
-        const reference = storage().ref(`/profile/${name}`);
-      
+        // const reference = storage().ref(`/profile/${name}`);
+        const reference = storage().ref(`/profile/resume/${name}`);
+
         // Upload the document to Firebase Storage
         try {
           const task = reference.putFile(fileCopyUri);
@@ -92,7 +109,8 @@ const [currentUid,setCureentUid]=useState();
          docData ?(
             <View>
             <Text style={{fontSize:14,fontWeight:"bold",color:"black"}}>{docData.name}</Text>
-            
+           
+
             <TouchableOpacity onPress={()=>UplodeResume()}>
          <View style={styles.selectBtn}> 
             <Text style={{fontSize:20,fontWeight:"bold",color:"white"}}>Uplode Resume</Text>

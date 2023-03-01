@@ -1,10 +1,11 @@
-import { View, Text,StyleSheet,TextInput,TouchableOpacity, Alert} from 'react-native'
+import { View, Text,StyleSheet,TouchableOpacity, Alert,StatusBar,Image,ImageBackground} from 'react-native'
 import React, { useState } from 'react'
 import SignUp from './SignUp';
 import auth from '@react-native-firebase/auth';
 import Home from './Home';
 import ForgotPassword from './ForgotPassword';
 import LinearGradient from 'react-native-linear-gradient';
+import {TextInput} from 'react-native-paper';
 // import AuthStack from '../../navigation/AuthStack';
 export default function Login({navigation}) {
 
@@ -39,29 +40,44 @@ export default function Login({navigation}) {
     }
   return (
     // <View style={styles.main}>
-        <LinearGradient  colors={['#2c3e50',"#2c3e50"]} style={styles.main}>
+        // <LinearGradient  colors={['#F8F9F5',"#F8F9F5"]} style={styles.main}>
+       
+        <ImageBackground source={require('../images/background.png')}
+        resizeMode="cover" style={styles.main}>
+
+          <StatusBar translucent backgroundColor='transparent' />
+          
+        <View style={{bottom:20}}>
+         <Image source={require('../images/logo_weverve.png')} style={{height:100,width:100}}/>
+        </View> 
+
        <View>
         <Text style={styles.heading}>Login</Text>
        </View>
        <View>
 
-         <TextInput placeholder='Email' 
+         <TextInput 
+           label="Email"
+           mode="outlined" 
+           placeholder='Email' 
             value={email}
             onChangeText={(text)=>setEmail(text)}
            style={styles.input}/>
 
          <TextInput placeholder='Password'
+          label="Password"
+          mode="outlined" 
           secureTextEntry={true}
           value={password}
           onChangeText={(text)=>setPassword(text)}
-         style={[styles.input,{top:20}]}/>
+         style={[styles.input,{top:10}]}/>
 
        </View>
        <TouchableOpacity 
          onPress={()=>handleLogin()}
        >
-         <View style={{marginTop:40,height:40,width:200,justifyContent:"center",alignItems:"center",backgroundColor:'purple',borderRadius:10}}>
-            <Text style={{color:"white",fontSize:20}}>Login</Text>
+         <View style={{marginTop:40,height:50,width:300,justifyContent:"center",alignItems:"center",backgroundColor:'#7CB9E8',borderRadius:10}}>
+            <Text style={{color:"black",fontSize:20,fontWeight:"bold"}}>Login</Text>
          </View>
        
        </TouchableOpacity>
@@ -70,7 +86,7 @@ export default function Login({navigation}) {
          onPress={()=>navigation.navigate(ForgotPassword)}
        >
          <View style={{marginTop:20}}>
-            <Text style={{fontSize:17,color:"#FFCCCB",fontWeight:'bold'}}>ForgotPassword</Text>
+            <Text style={{fontSize:18,color:"white",fontWeight:'bold'}}>ForgotPassword</Text>
          </View>
        </TouchableOpacity>
 
@@ -78,31 +94,37 @@ export default function Login({navigation}) {
        onPress={()=>navigation.navigate(SignUp)}
        >
          <View style={{marginTop:20}}>
-            <Text style={{fontSize:17,fontWeight:'bold',color:"white"}}>If You Woant to Add New User ?</Text>
+            <Text style={{fontSize:17,color:"black"}}>Dont have an account? SignUp</Text>
          </View>
        </TouchableOpacity>
-       </LinearGradient>
+
+      </ImageBackground>
+
+      //  </LinearGradient>
     // </View>
   
-  )
+  ) 
 }
 
 const styles = StyleSheet.create({
     main:{
         flex:1,
+         height:'100%',
+         width:'100%',
         justifyContent:"center",
         alignItems:"center",
         // backgroundColor:"#ececec"
     },
     input:{
         width:320,
-        backgroundColor:"#D3D3D3",
-        height:40
+        backgroundColor:"#F3F2ED",
+        height:45,
+        
     },
     heading:{
         fontSize:30,
         fontWeight:'bold',
-        color:"white",
+        color:"black",
         bottom:30
     }
 });
