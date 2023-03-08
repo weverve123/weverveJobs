@@ -6,6 +6,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Login from './Login';
 import LinearGradient from 'react-native-linear-gradient';
+import AwesomeAlert from 'react-native-awesome-alerts';
 // import logo_weverve from './images/logo_weverve';
 export default function SignUp({navigation}) {
 

@@ -19,15 +19,20 @@ import {
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [mobno, setMobno] = useState('');
+    const [email,setEmail] =useState('')
     const [address, setAddress] = useState('');
     const [college, setCollege] = useState('');
     const [qualification,Setqualification]=useState('');
     const [experance,setExpeance]=useState('')
-    
+    const [currentCTC,setCurrentCTC]=useState('');
+    const [noticePeriod,setNoticePeriod]=useState('')
+
     const [selectedTeam, setSelectedTeam] = useState({});
     const [selectedTeams, setSelectedTeams] = useState([]);
     const [cureentUid,setCureentUid]=useState()
     const [docData,SetDocData]=useState();
+    
+  
     
 
     useEffect(()=>{
@@ -51,7 +56,8 @@ import {
         // console.log("qurerySnapshot",qurerySnapshot[0])
         qurerySnapshot.forEach((doc)=>{
          
-          const {fname,lname,mobno,address,college,qualification,experance,selectedTeam,selectedTeams}=doc.data()
+          const {fname,lname,mobno,address,college,qualification,experance,
+            selectedTeam,selectedTeams, email ,currentCTC, noticePeriod}=doc.data()
         
           // console.log(doc.id); 
          
@@ -59,9 +65,12 @@ import {
           setFname(fname);
           setLname(lname);
           setMobno(mobno);
+          setEmail(email);
           setAddress(address);
           setCollege(college);
           setExpeance(experance);
+          setCurrentCTC(currentCTC);
+          setNoticePeriod(noticePeriod);
           Setqualification(qualification);
           setSelectedTeam(selectedTeam);
           setSelectedTeams(selectedTeams);
@@ -90,7 +99,9 @@ import {
            qualification:qualification,
            experance:experance,
            selectedTeam:selectedTeam,
-           selectedTeams:selectedTeams
+           selectedTeams:selectedTeams,
+           noticePeriod:noticePeriod,
+           currentCTC:currentCTC
         }   
         setFname('');
         setLname('');
@@ -99,18 +110,20 @@ import {
         setCollege('');
         Setqualification('');
         setExpeance('');
+        setCurrentCTC('');
+        setNoticePeriod('')
         setSelectedTeam({});
         setSelectedTeams([]);
          
-        console.log("userData",UserData);
+       
+        console.log("doc update start", typeof cureentUid)
 
-        // const res = await cityRef.set({
-        //   capital: true
-        // }, { merge: true });
+        const docref = await firestore().collection(cureentUid).doc(docData)
 
-       await firestore().collection('cureentUid').doc(docData).update(UserData).then(() =>{
-         console.log('Data Is Updated..')
-       })
+        docref.update(UserData).then(res=>{
+          console.log(" Data Updated",res);
+          alert("Data is Updated..")
+        })
 
         // var FirbaseData= firestore().collection('cureentUid').doc(docData);
         //   await FirbaseData.update(UserData).then(()=>{
@@ -123,7 +136,7 @@ import {
        }
        } 
        catch (error) {
-         console.log("error",error);
+         console.log("update error log ",error);
       }
    }
    
@@ -184,7 +197,7 @@ import {
   
     return (
       // <View style={{flex: 1}}>
-      <LinearGradient  colors={["#89b1d9","#89b1d9"]} style={styles.main}>
+      <LinearGradient  colors={["#E6E6FA","#E6E6FA"]} style={styles.main}>
         <ScrollView
           contentContainerStyle={{flexGrow: 1}}
           showsVerticalScrollIndicator={false}
@@ -226,6 +239,16 @@ import {
                 onChangeText={text => setMobno(text)}
               />
             </View>
+
+            <View style={styles.mobtext}>
+            <TextInput
+              label="Email"
+              mode="outlined"
+              placeholder="Enter Your Email"
+              value={email}
+              onChangeText={text => setEmail(text)}
+            />
+          </View>
   
             <View style={styles.mobtext}>
               <TextInput
@@ -287,6 +310,31 @@ import {
               style={{top: 10, width: 300}}
             />
           </View>
+
+          <View style={{top: 35, left: 20,}}>
+          <TextInput
+            label="Current CTC"
+            mode="outlined"
+            keyboardType="number-pad"
+            placeholder="Enter Your Current CTC in LPA"
+            value={currentCTC}
+            onChangeText={text => setCurrentCTC(text)}
+            style={{top: 10, width: 300}}
+          />
+        </View>
+
+        <View style={{top: 40, left: 20}}>
+          <TextInput
+            label="Notice period"
+            mode="outlined"
+            keyboardType="number-pad"
+            placeholder="Enter thes Notice Period In Month"
+            value={noticePeriod}
+            onChangeText={text => setNoticePeriod(text)}
+            style={{top: 10, width: 300}}
+          />
+        </View>
+
   
           <View style={{top: 50, width: 300, left: 30, marginBottom: 80}}>
             <Text style={styles.passingYearText}>Select Your Skill Set</Text>

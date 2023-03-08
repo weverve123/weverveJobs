@@ -5,6 +5,7 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  PermissionsAndroid,Platform
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
@@ -14,32 +15,61 @@ import firestore from '@react-native-firebase/firestore';
 import auth, { firebase } from '@react-native-firebase/auth';
 import UserDocument from './UserDocument';
 import LinearGradient from 'react-native-linear-gradient';
-
+import DocumentPicker from 'react-native-document-picker';
+import storage from '@react-native-firebase/storage';
+import Pdf from 'react-native-pdf';
+import { Image } from 'react-native-svg';
+import AntDesign from "react-native-vector-icons/AntDesign"
+import RNFetchBlob from 'rn-fetch-blob';
 
 export default function UserDetails({navigation}) {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [mobno, setMobno] = useState('');
   const [address, setAddress] = useState('');
+  const [email,setEmail] =useState('')
   const [college, setCollege] = useState('');
   const [qualification,Setqualification]=useState('');
-  const [experance,setExpeance]=useState('')
+  const [experance,setExpeance]=useState('');
+  const [currentCTC,setCurrentCTC]=useState('');
+  const [noticePeriod,setNoticePeriod]=useState('')
   
   const [selectedTeam, setSelectedTeam] = useState({});
   const [selectedTeams, setSelectedTeams] = useState([]);
   const [cureentUid,setCureentUid]=useState();
-  const [dataAvailable,setDataAvailable]=useState();
+  const [dataAvailable,setDataAvailable]=useState(false);
+  
+  const [docData,setDocData]=useState(''); 
+  const [docUrl,setDocUrl]=useState();
+  const [docName,setDocName]=useState();
+  
 
   useEffect(()=>{
     getUser();
     // handleSubmit();
+    getDatabase();
   },[])
+  
+  useEffect(() => {
+    const storage = firebase.storage();
+    const storageRef = storage.ref();
+    const imageRef = storageRef.child(`/profile/resume/${cureentUid}`);
+    imageRef.getDownloadURL().then((url) => {
+      setDocUrl(url);
+      console.log(" This is doc name",url);
+    });
 
+  }, [cureentUid]); 
+  
+   
 
   const getUser=()=>{
     const userData= firebase.auth().currentUser.uid
+    const currentUserEmail=firebase.auth().currentUser.email
   //  console.log(userData);
    setCureentUid(userData);
+   setEmail(currentUserEmail);
+   
 }  
 
 const getDatabase= async () =>{
@@ -52,17 +82,11 @@ const getDatabase= async () =>{
        
         const {fname}=doc.data()
       
-        // console.log(doc.id); 
-        setDataAvailable(fname);
-        // setLname(lname);
-        
-        // setMobno(mobno);
-        // setAddress(address);
-        // setCollege(college);
-        // setExpeance(experance);
-        // Setqualification(qualification);
-        // setSelectedTeam(selectedTeam);
-        // setSelectedTeams(selectedTeams);
+        if(fname.length >0)
+        {
+          console.log("database is avilable..")
+           setDataAvailable(true);
+        }
       }     
       )
      
@@ -73,12 +97,52 @@ const getDatabase= async () =>{
   }
 }  
 
+const PicDocument= async()=>{
+  try {
+     const responce= await DocumentPicker.pickSingle({
+          type:[DocumentPicker.types.pdf],
+          copyTo:"cachesDirectory"
 
+      })
+      console.log(responce);
+      setDocData(responce);
+      setDocName(responce.name);
+  } catch (error) {
+      
+      console.log(error)
+  }
+}
+
+async function UplodeResume() {
+  // Get the selected document
+  const { uri, name,fileCopyUri} = docData;
+
+  // setDocName=name;
+  // Create a reference to the location where the document will be saved
+  // const reference = storage().ref(`/profile/${name}`);
+  const reference = storage().ref(`/profile/resume/${cureentUid}`);
+
+  // Upload the document to Firebase Storage
+  try {
+    const task = reference.putFile(fileCopyUri);
+    // Monitor the upload progress
+    task.on('state_changed', (snapshot) => {
+      console.log(`Uploaded: ${snapshot.bytesTransferred} / ${snapshot.totalBytes}`);
+    });
+    // Wait for the upload to complete
+    await task;
+    console.log('Document uploaded to Firebase Storage');
+    alert("Document uploaded to Firebase Storage");
+  } catch (err) {
+    console.log(err);
+  }
+}
 
   const handleSubmit=async()=>{      
     try {   
      if(fname.length && lname.length && mobno.length && mobno.length && address.length &&
-       college.length && qualification.length && experance.length > 0)
+       college.length && qualification.length && experance.length && email.length
+       && currentCTC.length && noticePeriod.length >0)
      {
        const UserData={
          id:cureentUid,
@@ -90,7 +154,10 @@ const getDatabase= async () =>{
          qualification:qualification,
          experance:experance,
          selectedTeam:selectedTeam,
-         selectedTeams:selectedTeams
+         selectedTeams:selectedTeams,
+         email:email,
+         currentCTC:currentCTC,
+         noticePeriod:noticePeriod
       }   
       setFname('');
       setLname('');
@@ -101,6 +168,9 @@ const getDatabase= async () =>{
       setExpeance('');
       setSelectedTeam({});
       setSelectedTeams([]);
+      
+      setCurrentCTC('');
+      setNoticePeriod('');  
        
      await firestore().collection(cureentUid).add(UserData).then(ref =>{
        console.log(ref)
@@ -108,7 +178,7 @@ const getDatabase= async () =>{
    
      }
      else{
-       alert ("Plese enter the task  // id:doc.cureentUid,")  
+       alert ("Please Fill all the input fields ")  
      }
      } 
      catch (error) {
@@ -170,8 +240,78 @@ const getDatabase= async () =>{
     return val => setSelectedTeam(val);
   }
 
+
+
+   const handlePdfDownload=async()=>{
+      try {
+        console.log('calling permisstion')
+        if(PermissionsAndroid.RESULTS.GRANTED === 'granted')
+        {
+          downloadPdf()
+        }
+        else{
+           await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title:'Storage Permission Required',
+              message:'App needs access to your storage to download PDF',
+              buttonNeutral:'Ask Me Later',
+              buttonNegative:'cancel',
+              buttonPositive:'OK'
+            }
+          )
+          
+          if(PermissionsAndroid.RESULTS.GRANTED === 'granted')
+          {
+            console.log('Storage Permisstion Granted.')
+            downloadPdf()
+          }
+          else{
+            alert("Storage Permission Not Granted")
+          }
+
+        }
+        
+      } catch (error) {
+        console.log(error)
+      }
+    
+
+   }
+
+   const downloadPdf=()=>{
+        let date= new Date()
+        let pdf_url=docUrl
+        // let ext =getExtention(pdf_url)
+        
+        const {config,fs}= RNFetchBlob
+        let FileDir=fs.dirs.DownloadDir;
+        let options ={
+          fileCache:true,
+          addAndroidDownloads:{
+
+            useDownloadManager:true,
+            notification:true,
+            path:FileDir + "/AllResume" + Math.floor(date.getTime() + date.getSeconds()/2) + '.pdf',
+            description:'File Download'
+          }
+        }
+        config(options)
+        .fetch('GET',pdf_url)
+        .then(res =>{
+          console.log('res ->',JSON.stringify(res))
+          alert('Image Downloaded SuccessFully')
+        })
+   }
+
+  //  const getExtention = filename =>{
+  //   return /[.]/.exec(filename)? /[^.]+$/.exec(filename) : undefined
+  //  }
+   
+
+   
   return (
-    <LinearGradient  colors={["#89b1d9","#89b1d9"]} style={styles.main}>
+    <LinearGradient  colors={["#E6E6FA","#E6E6FA"]} style={styles.main}>
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
         showsVerticalScrollIndicator={false}
@@ -211,6 +351,16 @@ const getDatabase= async () =>{
               keyboardType="number-pad"
               value={mobno}
               onChangeText={text => setMobno(text)}
+            />
+          </View>
+
+          <View style={styles.mobtext}>
+            <TextInput
+              label="Email"
+              mode="outlined"
+              placeholder="Enter Your Email"
+              value={email}
+              onChangeText={text => setEmail(text)}
             />
           </View>
 
@@ -270,10 +420,36 @@ const getDatabase= async () =>{
             mode="outlined"
             placeholder="Enter the  year of Experience"
             value={experance}
+            keyboardType="number-pad"
             onChangeText={text => setExpeance(text)}
             style={{top: 10, width: 300}}
           />
         </View>
+
+        <View style={{top: 35, left: 20,}}>
+          <TextInput
+            label="Current CTC"
+            mode="outlined"
+            keyboardType="number-pad"
+            placeholder="Enter Your Current CTC in LPA"
+            value={currentCTC}
+            onChangeText={text => setCurrentCTC(text)}
+            style={{top: 10, width: 300}}
+          />
+        </View>
+
+        <View style={{top: 40, left: 20}}>
+          <TextInput
+            label="Notice period"
+            mode="outlined"
+            keyboardType="number-pad"
+            placeholder="Enter thes Notice Period In Month"
+            value={noticePeriod}
+            onChangeText={text => setNoticePeriod(text)}
+            style={{top: 10, width: 300}}
+          />
+        </View>
+
 
         <View style={{top: 50, width: 300, left: 30, marginBottom: 80}}>
           <Text style={styles.passingYearText}>Select Your Skill Set</Text>
@@ -294,29 +470,54 @@ const getDatabase= async () =>{
             marginBottom: 30,
           }}
         >
-          {}
+        <View  style={{flex:1,alignItems:"center",flexDirection:"row"}}>
+            <View >
+              <Pdf trustAllCerts={false} style={{height:50,width:300,}} source={{uri:docUrl}}/>
+            </View>
+            <TouchableOpacity onPress={()=>handlePdfDownload()}>
+            <AntDesign name="download" size={25} color={"black"}/> 
+            </TouchableOpacity>
+        </View>
+
+      <View>    
+    {
+         docData ?( 
+            <View>
+            <Text style={{fontSize:14,fontWeight:"bold",color:"black"}}>{docData.name}</Text>
+           
+
+            <TouchableOpacity onPress={()=>UplodeResume()}>
+         <View style={styles.uploadeBtn}> 
+            <Text style={{fontSize:20,fontWeight:"bold",color:"white"}}>Uplode Resume</Text>
+         </View>
+       </TouchableOpacity>
+            </View>
+         ):(
+            <Text style={{fontSize:14,fontWeight:"bold",color:"black",marginBottom:10}}>No Resume Selected </Text>
+         )
+       }
+       <TouchableOpacity onPress={()=>PicDocument()} style={{top:20}}>
+         <View style={styles.selectBtn}> 
+            <Text style={{fontSize:20,fontWeight:"bold",color:"white"}}>Select Resume</Text>
+         </View>
+       </TouchableOpacity>
+    </View>
+
+
+           
           <TouchableOpacity
            onPress={()=>handleSubmit()}
+           style={{top:40,}}
+           disabled={dataAvailable}
           >
             {/* <View style={styles.submitbtn}> */}
-            <LinearGradient  colors={["#133454","#133454"]} style={styles.submitbtn}>
+            <LinearGradient  colors={["#133454","#133454"]} style={styles.uplodebtn}>
               <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
                 Submit Details
               </Text>
               </LinearGradient>
             {/* </View> */}
           </TouchableOpacity>
-
-          <TouchableOpacity
-           onPress={()=>navigation.navigate("UserDocument")}
-           style={{top:20,}}
-          >
-            <View style={styles.uplodebtn}>
-              <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
-                Upload Document
-              </Text>
-            </View>
-          </TouchableOpacity> 
 
         </View>
       </ScrollView>
@@ -367,6 +568,22 @@ const styles = StyleSheet.create({
   },
   main:{
     flex:1,
-    paddingBottom:70
-  }
+    paddingBottom:90
+  },
+  selectBtn:{
+   height:50,
+   width:200,backgroundColor:"#133454",
+   justifyContent:"center",
+   alignItems:"center",
+   marginBottom:30,
+   borderRadius:10
+   },
+   uploadeBtn:{ 
+    height:50,
+    width:200,backgroundColor:"#133454",
+    justifyContent:"center",
+    alignItems:"center",
+    borderRadius:10
+
+   }
 });
