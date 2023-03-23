@@ -1,4 +1,4 @@
-import { View, Text,StyleSheet,TouchableOpacity,StatusBar, Image,ImageBackground} from 'react-native'
+import { View, Text,StyleSheet,TouchableOpacity,StatusBar, Image,ImageBackground,Alert } from 'react-native'
 import React, { useState } from 'react'
 import {TextInput} from 'react-native-paper';
 // import SignIn from './SignIn'
@@ -14,40 +14,54 @@ export default function SignUp({navigation}) {
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
 
-    const hadleSignUp= async()=>{
-      try{
-        if(email.length >0 && password.length >0 && name.length >0)
-
-        {
-        const isUsercreated= await auth().createUserWithEmailAndPassword(
-          email,
-          password
-          );  
-        setEmail('');
-        setPassword('');
-        setName('')
-
-        const userData ={
-          id:isUsercreated.user.uid,
-          name:name,
-          email:email
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertButtons, setAlertButtons] = useState([]);
+    
+    const hadleSignUp = async () => {
+      try {
+        if (email.length > 0 && password.length > 0 && name.length > 0) {
+          const isUserCreated = await auth().createUserWithEmailAndPassword(
+            email,
+            password
+          );
+    
+          setEmail('');
+          setPassword('');
+          setName('');
+    
+          const userData = {
+            id: isUserCreated.user.uid,
+            name: name,
+            email: email,
+          };
+    
+          await firestore()
+            .collection('users')
+            .doc(isUserCreated.user.id)
+            .set(userData);
+        } else {
+          setAlertTitle('Please Enter the Input Fields');
+          setAlertButtons([{ text: 'OK', onPress: () => setShowAlert(false) }]);
+          setShowAlert(true);
         }
-
-         await firestore().collection("users").doc(isUsercreated.user.id).
-         set(userData);
-
+      } catch (err) {
+        if (err.code === 'auth/email-already-in-use') {
+          setAlertTitle('User already signed up');
+          setAlertMessage('Please login instead.');
+          setAlertButtons([{ text: 'OK', onPress: () => setShowAlert(false) }]);
+          setShowAlert(true);
+        } else {
+          console.log(err);
+          setAlertTitle('Error');
+          setAlertMessage(err.message);
+          setAlertButtons([{ text: 'OK', onPress: () => setShowAlert(false) }]);
+          setShowAlert(true);
+        }
       }
-      else{
-        alert("Please Enter the Input fileds")
-      }
-    }
-      catch(err)
-      {
-         console.log(err)
-        
-      }
-      
-    }
+    };
+    
   return (
     // <View style={styles.main}>
     // <LinearGradient  colors={['#E6E6FA',"#E6E6FA"]} style={styles.main}>
@@ -99,7 +113,7 @@ export default function SignUp({navigation}) {
          onPress={()=>hadleSignUp()}
        >
          <View style={{marginTop:40,height:50,width:300,justifyContent:"center",alignItems:"center",backgroundColor:'#7CB9E8',borderRadius:10}}>
-            <Text style={{color:"black",fontSize:20,fontWeight:"bold"}}>SignUp</Text>
+            <Text style={{color:"black",fontSize:20,fontFamily:'Helvetica-Narrow Bold'}}>SignUp</Text>
          </View>
        
        </TouchableOpacity>
@@ -109,11 +123,36 @@ export default function SignUp({navigation}) {
         // onPress={()=>navigation.navigate(SignUp)}  
        >
          <View style={{marginTop:20}}>
-            <Text style={{fontSize:20,color:"black",fontWeight:"bold"}}>Login</Text>
+            <Text style={{fontSize:20,color:"black",fontFamily:'Helvetica-Narrow Bold'}}>Login</Text>
          </View>
        </TouchableOpacity>
     {/* </View> */}
     {/* </LinearGradient> */}
+     
+    <View>
+    <AwesomeAlert
+      show={showAlert}
+      title={alertTitle}
+      animatedValue={0.5}
+      message={alertMessage}
+      closeOnTouchOutside={true}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      confirmText="OK"
+      confirmButtonColor="red"
+      onCancelPressed={() => setShowAlert(false)}
+      onConfirmPressed={() => setShowAlert(false)}
+      onDismiss={() => setShowAlert(false)}
+      buttons={alertButtons}
+      titleStyle={{color:"black",fontSize:20, fontFamily:'Helvetica-Narrow Bold'}}
+      messageStyle={{color:"black",fontSize:15,fontFamily:'WorkSans-Regular',}}
+      contentContainerStyle={{height:220,with:380,justifyContent:"center",backgroundColor:'#f5f5f5',borderRadius:10}}
+      confirmButtonStyle={{height:40,width:80,justifyContent:"center",alignItems:"center"}}
+      confirmButtonTextStyle={{fontSize:20,fontFamily:'Helvetica-Narrow Bold',color:"white"}}
+    />
+  </View>
+       
     </ImageBackground>
   )
 }
@@ -132,9 +171,10 @@ const styles = StyleSheet.create({
         height:45,
     },
     heading:{
-        fontSize:30,
-        fontWeight:'bold',
+        fontSize:25,
+        // fontWeight:'bold',
         color:"black",
-        bottom:30
+        bottom:30,
+        fontFamily:'Helvetica-Narrow Bold',
     }
 });

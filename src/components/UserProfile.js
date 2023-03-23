@@ -9,20 +9,24 @@ import Feather from "react-native-vector-icons/Feather";
 import AntDesign from "react-native-vector-icons/AntDesign"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Fontisto from "react-native-vector-icons/Fontisto"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import storage from '@react-native-firebase/storage';
 import RNFetchBlob from 'rn-fetch-blob';
-
+import XLSX from 'xlsx';
+import SMTPMailer from 'react-native-smtp-mailer';
 
 export default function UserProfile({navigation}) {
 
   const [currentUid,setCurrentUid]=useState();
   const [list,setList]=useState();
   const [docUrl,setDocUrl]=useState();
+  const [ExcelData,setExcelData]=useState();
+  
 
   useEffect(()=>{
     getDatabase();
      getUser();
-
+    //  generateExcelData(); 
   },[currentUid]);
 
   useEffect(() => {
@@ -35,6 +39,7 @@ export default function UserProfile({navigation}) {
     });
 
   }, [currentUid]); 
+
 
   const getUser=()=>{
     const userData= firebase.auth().currentUser.uid
@@ -149,8 +154,29 @@ const downloadPdf=()=>{
       alert('Image Downloaded SuccessFully')
     })
 }
+    
+  const hanleEmail =()=>{
+  
+    SMTPMailer.sendMail({
+      mailhost: 'smtp.gmail.com',
+      port: '465',
+      ssl: true,
+      username: 'umeshbhagwat9921@gmail.com',
+      password: 'wfbghucdarxazkcv',
+      from: 'umeshbhagwat9921@gmail.com',
+      recipients: 'umeshbhagwatkopargaon@gmail.com',
+      subject: 'Test Email',
+      htmlBody: '<h1>This is an User data</h1><p>This is a test email.</p>',
+      attachmentPaths:'ExcelData'
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-
+  }
 
   return (
     <LinearGradient  colors={['#E6E6FA',"#E6E6FA"]} style={styles.main}>    
@@ -160,8 +186,8 @@ const downloadPdf=()=>{
            <View>
               <LinearGradient  colors={['white', 'white',]} style={styles.mainCard}>
               <View style={styles.innerCard}>
-                <View style={{height:50,width:300,bottom:20}}>
-                  <Text style={{fontSize:30,fontWeight:"bold",color:"black"}}>  Welcome
+                <View style={{height:30,width:300,bottom:20}}>
+                  <Text style={{fontSize:30,color:"black",fontFamily:'Helvetica-Narrow Bold'}}>  Welcome
                   <Text> {item.fname}</Text>
                   </Text>
                 </View>
@@ -179,16 +205,16 @@ const downloadPdf=()=>{
                   <View>
                     <Feather name="phone" size={25} color={"green"}/> 
                   </View>
-                    <Text style={{fontSize:20,color:"black",left:20}}> 
+                    <Text style={styles.userDataText}> 
                   {item.mobno}</Text>
                  </View> 
 
-                 <View style={{justifyContent:"flex-start",flexDirection:"row",}}>  
-                  <View>
+                 <View style={{flexDirection:"row",justifyContent:"flex-start",paddingTop:10}}>  
+                  <View style={{}}>
                     <Fontisto name="email" size={25} color={"green"}/> 
                   </View>
                   <View>
-                    <Text style={{fontSize:20,color:"black",left:20}}> 
+                    <Text style={{fontSize:20,fontFamily:'WorkSans-Regular',color:'black',left:15}}> 
                    {item.email}</Text>
                   </View>
                  </View> 
@@ -196,10 +222,10 @@ const downloadPdf=()=>{
 
                 <View style={{justifyContent:"flex-start",flexDirection:"row",paddingTop:10}}>
                    <View>
-                     <AntDesign name="home" size={25} color={"green"}/> 
+                     <FontAwesome5 name="home" size={25} color={"green"}/> 
                    </View>
                     <View>
-                         <Text style={{fontSize:20,color:"black",left:20}}>{item.address}</Text>
+                         <Text style={styles.userDataText}>{item.address}</Text>
                    </View>
                  </View>
 
@@ -207,8 +233,8 @@ const downloadPdf=()=>{
                   <View>
                      <FontAwesome name="university" size={25} color={"green"}/> 
                   </View>
-                 <View>
-                    <Text style={{fontSize:20,color:"black",left:15}}>{item.college}</Text>
+                 <View style={{paddingRight:5}}>
+                    <Text style={styles.userDataText}>{item.college}</Text>
                   </View>
               </View>
 
@@ -217,17 +243,17 @@ const downloadPdf=()=>{
                  <FontAwesome name="graduation-cap" size={25} color={"green"}/> 
                  </View>
                 <View>
-                <Text style={{fontSize:20,color:"black",left:10}}> {item.qualification}</Text>
+                <Text style={styles.userDataText}> {item.qualification}</Text>
                 </View> 
               </View>
 
                
               <View style={{flexDirection:"row",padding:5}}>
                 <View>
-                  <Text style={{fontSize:20,color:"black"}}>Year of passing :</Text> 
+                  <Text style={styles.dataHeading}>Year of passing :</Text> 
                 </View>
               <View>
-               <Text style={{fontSize:20,color:"black",left:10}}>
+               <Text style={styles.userDataText}>
                   {item.newselectedTeam}
                 </Text>
                </View> 
@@ -236,28 +262,28 @@ const downloadPdf=()=>{
 
                <View style={{flexDirection:"row",padding:5}}>
                 <View>
-                  <Text style={{fontSize:20,color:"black"}}>Year of Experience : </Text>
+                  <Text style={styles.dataHeading}>Year of Experience : </Text>
                 </View>
                    <View>
-                      <Text style={{fontSize:20,color:"black"}}> {item.experance}</Text>
+                      <Text style={styles.userDataText}>{item.experance}</Text>
                    </View>
                 </View>
 
                 <View style={{flexDirection:"row",padding:5}}>
                 <View>
-                  <Text style={{fontSize:20,color:"black"}}>Current CTC : </Text>
+                  <Text style={styles.dataHeading}>Current CTC : </Text>
                 </View>
                    <View>
-                      <Text style={{fontSize:20,color:"black"}}> {item.currentCTC} LPA</Text>
+                      <Text style={styles.userDataText}> {item.currentCTC} LPA</Text>
                    </View>
                 </View>
 
                 <View style={{flexDirection:"row",padding:5}}>
                 <View>
-                  <Text style={{fontSize:20,color:"black"}}>Notice Period: </Text>
+                  <Text style={styles.dataHeading}>Notice Period: </Text>
                 </View>
                    <View>
-                      <Text style={{fontSize:20,color:"black"}}> {item.noticePeriod} Months </Text>
+                      <Text style={styles.userDataText}> {item.noticePeriod} Months </Text>
                    </View>
                 </View>
               
@@ -265,11 +291,11 @@ const downloadPdf=()=>{
               <View  style={{flexDirection:"row",padding:5}}>
 
                 <View>
-                  <Text  style={{fontSize:20,color:"black"}}>Skills : </Text>
+                  <Text  style={styles.dataHeading}>Skills : </Text>
                 </View>
 
                 <View>
-                   <Text style={{fontSize:20,color:"black"}}>{item.skills}</Text>
+                   <Text style={styles.userDataText}>{item.skills}</Text>
                 </View>
               
               </View>
@@ -281,7 +307,7 @@ const downloadPdf=()=>{
                {docUrl?(
                 <View style={{ justifyContent:'center',top:10}}>
                 <View style={{}}>
-                  <Text style={styles.data}>DownLoad Resume</Text>
+                  <Text style={{fontSize:20,fontFamily:"Poppins-LightItalic",color:"black",fontWeight:"bold"}}>DownLoad Resume</Text>
                 </View>
                 <TouchableOpacity onPress={()=>handlePdfDownload()} style={{left:80,top:10}}>
                    <AntDesign name="download" size={25} color={"green"} /> 
@@ -295,9 +321,19 @@ const downloadPdf=()=>{
             onPress={()=>navigation.navigate(EditProfile)}
             >
                 <LinearGradient  colors={['#275f96', '#275f96',]} style={styles.btnEdit}>
-                 <Text style={{fontSize:22,fontWeight:"bold",color:"white",}}>Edit Information</Text>
+                 <Text style={{fontSize:22,fontWeight:"bold",color:"white",fontFamily:'WorkSans-Regular'}}>Edit Information</Text>
                  </LinearGradient>
                </TouchableOpacity>
+
+               {/* <TouchableOpacity
+            onPress={()=>hanleEmail()} style={{top:10}}
+            >
+                <LinearGradient  colors={['#275f96', '#275f96',]} style={styles.btnEdit}>
+                 <Text style={{fontSize:22,fontWeight:"bold",color:"white",}}>send mail</Text>
+                 </LinearGradient>
+               </TouchableOpacity> */}
+
+
           </View>
           </LinearGradient> 
            </View>        
@@ -333,7 +369,8 @@ const styles = StyleSheet.create({
   },
   data:{
     fontSize:25,
-    // fontWeight:"bold",
+    // fontFamily:'Poppins-LightItalic',
+    fontFamily:'WorkSans-Regular',
     color:"black"
   },
   main:{
@@ -345,7 +382,8 @@ const styles = StyleSheet.create({
     backgroundColor:"#3899ac",
     justifyContent:"center",
     alignItems:"center",
-    borderRadius:20
+    borderRadius:20,
+   
   },
   personalMain:{
     width:320,
@@ -355,9 +393,18 @@ const styles = StyleSheet.create({
     borderRadius:20,
     marginBottom:20
   },
-  innerCard:{
-   
-    
+  userDataText:{
+    fontSize:20,
+    color:"black",
+    left:15,
+    // fontFamily:'Futura Light Oblique',
+    fontFamily:'WorkSans-Regular',
+  },
+  dataHeading:{
+    fontSize:20,
+    color:"black",
+    // fontFamily:'Poppins-LightItalic',
+    fontFamily:'WorkSans-Regular'
   }
   
 })

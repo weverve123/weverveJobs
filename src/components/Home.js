@@ -93,7 +93,7 @@ export default function Home({navigation}) {
           </View> 
           {/* <Text style={{right:60, fontSize:16,color:"black"}}>{item.Location}</Text>  */}
           <View>
-             <Text style={{fontSize:16,color:"black"}}>{item.Location}</Text>
+             <Text style={styles.location}>{item.Location}</Text>
           </View>
 
           </View> 
@@ -104,18 +104,18 @@ export default function Home({navigation}) {
                <Ionicons name='ios-briefcase-outline'size={20} color={"red"}/>
              </View>
              <View style={{left:7}}>
-               <Text style={{fontSize:16,color:"black"}}>{item.JobType}</Text>
+               <Text style={styles.location}>{item.JobType}</Text>
              </View>
 
           </View>
 
           <View style={{justifyContent:"flex-start"}}>
-          <Text style={{fontSize:16,color:"black",top:10,left:10}}>Skills- {item.Skills} </Text>
+          <Text style={styles.skills}>Skills- {item.Skills} </Text>
            
           </View>
 
          <View style={{justifyContent:"center",alignItems:"center",padding:20,}}>
-          <Text style={{color:"black"}}>{item.Jd}</Text>
+          <Text style={styles.jdText}>{item.Jd}</Text>
         </View>
          
          <View style={{justifyContent:"center",alignItems:"center"}}>
@@ -188,22 +188,36 @@ const styles = StyleSheet.create({
   },
   btntext:{
     fontSize:20,
-    fontWeight:"bold",
-    color:"white"
+    // fontWeight:"bold",
+    color:"white",
+    fontFamily:'Helvetica-Narrow Bold',
   },
    
   jobrole:{
-    fontSize:30,
-    fontWeight:"bold",
-    fontFamily:'NotoSans',
+    fontSize:25,
+    // fontWeight:"bold",
+    fontFamily:'Helvetica-Narrow Bold',
     color:"black",
     
   },
-  // jd:{
-  //   fontSize:15,
-  //   fontWeight:"bold",
-  //   padding:5,
-  //   color:"green",
-  //   fontFamily:"Poppins-Italic"
-  // }
+  location:{
+    fontSize:16,
+    color:"black",
+    //  fontFamily:'Futura Light Oblique'
+     fontFamily:'Helvetica-Narrow Bold',
+  },
+  skills:{
+    fontSize:16,
+    color:"black",
+    top:10,left:10,
+     fontFamily:'Helvetica-Narrow Bold',
+    // fontFamily:'Futura Light Oblique'
+  },
+  jdText:{
+    // fontFamily:'Futura Light Oblique',
+    fontFamily:'WorkSans-Regular',
+    color:"black",
+    fontSize:16,
+    textAlign:"justify"
+  }
 })

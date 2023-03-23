@@ -17,10 +17,14 @@ import UserDocument from './UserDocument';
 import LinearGradient from 'react-native-linear-gradient';
 import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage';
-import Pdf from 'react-native-pdf';
+import Pdf,{PDFGenerator } from 'react-native-pdf';
+// import PDFGenerator from 'react-native-pdf';
 import { Image } from 'react-native-svg';
 import AntDesign from "react-native-vector-icons/AntDesign"
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob,{RNFS} from 'rn-fetch-blob';
+ import { CsvWriter } from 'csv-writer';
+import XLSX from 'xlsx';
+import reactNativeHTMLToPdf from 'react-native-html-to-pdf'
 
 export default function UserDetails({navigation}) {
   const [fname, setFname] = useState('');
@@ -42,13 +46,22 @@ export default function UserDetails({navigation}) {
   const [docData,setDocData]=useState(''); 
   const [docUrl,setDocUrl]=useState();
   const [docName,setDocName]=useState();
-  
+  const [list,setList]=useState();
+  const [ExcelData,setExcelData]=useState();
+  const [ExcelUrl,setExcelUrl]=useState();
 
   useEffect(()=>{
     getUser();
     // handleSubmit();
     getDatabase();
-  },[])
+    
+  },[cureentUid])
+
+  useEffect(()=>{
+    console.log("This Is an UserList",list);
+
+  },[list])
+
   
   useEffect(() => {
     const storage = firebase.storage();
@@ -62,7 +75,6 @@ export default function UserDetails({navigation}) {
   }, [cureentUid]); 
   
    
-
   const getUser=()=>{
     const userData= firebase.auth().currentUser.uid
     const currentUserEmail=firebase.auth().currentUser.email
@@ -72,6 +84,8 @@ export default function UserDetails({navigation}) {
    
 }  
 
+
+
 const getDatabase= async () =>{
   try {
     const ref =firestore().collection(cureentUid)
@@ -80,22 +94,49 @@ const getDatabase= async () =>{
       // console.log("qurerySnapshot",qurerySnapshot[0])
       qurerySnapshot.forEach((doc)=>{
        
-        const {fname}=doc.data()
+        const {fname,lname,mobno,address,college,qualification,experance,
+          email,currentCTC,noticePeriod,selectedTeam,selectedTeams}=doc.data()
+      
+        const newselectedTeam=JSON.stringify(selectedTeam.item);
+
+        // const newselectedTeams=JSON.stringify(selectedTeams);
+         
+        let skills = selectedTeams.map(function(item) {
+          return ` ${item ['item']} ,`
+        });
       
         if(fname.length >0)
         {
+          list.push({
+            id:doc.id,
+            fname,
+            lname,
+            mobno,
+            address,
+            college,
+            qualification,
+            experance,
+             skills,
+            email,
+            currentCTC,
+            noticePeriod,
+            newselectedTeam
+          })
           console.log("database is avilable..")
-           setDataAvailable(true);
+         
+          setDataAvailable(true);
         }
       }     
       )
-     
+       setList(list)
+       
     }) 
      
   } catch (error) {
     console.log(error);
   }
 }  
+
 
 const PicDocument= async()=>{
   try {
@@ -188,6 +229,18 @@ async function UplodeResume() {
 
   const Year = [
     {
+      item: '2016',
+      id: 'C',
+    },
+    {
+      item: '2017',
+      id: 'B',
+    },
+    {
+      item: '2018',
+      id: 'A',
+    },
+    {
       item: '2019',
       id: 'JUVE',
     },
@@ -275,8 +328,7 @@ async function UplodeResume() {
       } catch (error) {
         console.log(error)
       }
-    
-
+  
    }
 
    const downloadPdf=()=>{
@@ -304,12 +356,123 @@ async function UplodeResume() {
         })
    }
 
-  //  const getExtention = filename =>{
-  //   return /[.]/.exec(filename)? /[^.]+$/.exec(filename) : undefined
-  //  }
+   const handlePDF=async()=>{
    
+    const options = {
+      html: `
+        <div>
+          ${list.map((val,index) => {
+            console.log("this is an data fname", val.fname);
+            return `
+              <div key=${index}>
+                <h2>${val.fname} ${val.lname}</h2>
+                
+                <table border='1'>
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Details</th>
+                      
+                      </tr>
+                    </thead>
 
-   
+                    <tr>
+                     <td>Name </td>
+                     <td>${val.fname} ${val.lname}</td>
+                    </tr>
+
+                    <tr>
+                     <td>Mobile Number</td>
+                      <td> ${val.mobno}</td>
+                    </tr>
+
+                    <tr> 
+                       <td>Email</td>
+                       <td>${val.email}</td>
+                    </tr>
+
+                    <tr>
+                       <td>Adress</td>
+                      <td>${val.address} </td>
+                      </tr>
+
+                    <tr>
+                      <td>College Name</td>
+                      <td>${val.college}</td>
+                    </tr>
+
+                    <tr> 
+                     <td>Higher Qualification </td>
+                     <td>${val.qualification} </td>
+                     </tr>
+
+                     <tr> 
+                     <td>Year of Passing </td>
+                     <td>${val.newselectedTeam} </td>
+                     </tr>
+
+                    <tr> 
+                      <td>Current CTC</td>
+                       <td>${val.currentCTC} LPA </td>
+                    </tr>
+
+                    <tr>
+                      <td>Total Experance</td>
+                      <td>${val.experance} Years </td>
+                     </tr>
+
+                    <tr>
+                       <td>Notice Period</td>
+                       <td> ${val.noticePeriod} Months </td>
+                    </tr>
+                  
+                    <tr>
+                       <td>Notice Period</td>
+                       <td> ${val.skills} </td>
+                    </tr>
+
+                    <tr>
+                       <td>Resume</td>
+                       <td> ${docUrl} </td>
+                    </tr> 
+                
+              </table>
+
+              </div>
+            `
+          }).join('')}
+        </div>
+      `,
+      fileName: "html_to_pdf"
+    }
+    
+
+    const file =await reactNativeHTMLToPdf.convert(options);
+    
+    const file_path= file.filePath
+    console.log("this is an filedv data...",file_path);
+    const reference = storage().ref(`/profile/detailsPDF/${file_path}`);
+
+    ///profile/ExcelData/${fileName}
+
+  // Upload the document to Firebase Storage
+  try {
+    const task = reference.putFile(file_path);
+    // Monitor the upload progress
+    task.on('state_changed', (snapshot) => {
+      console.log(`Uploaded: ${snapshot.bytesTransferred} / ${snapshot.totalBytes}`);
+    });
+    // Wait for the upload to complete
+    await task;
+    console.log('Document uploaded to Firebase Storage');
+    alert("Document uploaded to Firebase Storage");
+  } catch (err) {
+    console.log(err);
+  }
+       
+   }
+
+
   return (
     <LinearGradient  colors={["#E6E6FA","#E6E6FA"]} style={styles.main}>
       <ScrollView
@@ -451,7 +614,7 @@ async function UplodeResume() {
         </View>
 
 
-        <View style={{top: 50, width: 300, left: 30, marginBottom: 80}}>
+        <View style={{top: 50, width: 300, left: 30, marginBottom: 80,}}>
           <Text style={styles.passingYearText}>Select Your Skill Set</Text>
           <SelectBox
             label="Select multiple"
@@ -459,6 +622,8 @@ async function UplodeResume() {
             selectedValues={selectedTeams}
             onMultiSelect={onMultiChange()}
             onTapClose={onMultiChange()}
+            // inputPlaceholder={}
+           
             isMulti
           />
         </View>
@@ -518,6 +683,20 @@ async function UplodeResume() {
               </LinearGradient>
             {/* </View> */}
           </TouchableOpacity>
+
+          {/* <TouchableOpacity
+           onPress={()=>handlePDF(list)}
+           style={{marginTop:45,}}
+           
+          >
+          
+            <LinearGradient  colors={["#133454","#133454"]} style={styles.uplodebtn}>
+              <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white'}}>
+               uploadpdf
+              </Text>
+              </LinearGradient>
+           
+          </TouchableOpacity> */}
 
         </View>
       </ScrollView>

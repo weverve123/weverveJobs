@@ -167,6 +167,12 @@ android {
        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
      }
 
+////////////////////////////// smtp /////////////
+     packagingOptions {
+		exclude 'META-INF/mimetypes.default'
+		exclude 'META-INF/mailcap.default'
+	}
+//////////////////////////////////
 
 }
 
@@ -190,6 +196,10 @@ dependencies {
         exclude group:'com.squareup.okhttp3', module:'okhttp'
     }
 
+   
+  // HTML to pdf //
+    //   compile project(':react-native-html-to-pdf')
+  //////////////// 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

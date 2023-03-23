@@ -5,9 +5,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import AppStack from './AppStack';
 import TabStack from './TabStack';
 // import Logout from '../src/components/Logout';
-import Contact from '../src/components/Contact';
+import Contact from '../src/components/AboutUs';
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import AboutUs from '../src/components/AboutUs';
 
 const Drawer = createDrawerNavigator();
 
@@ -34,7 +35,7 @@ export default function DrawerNavigator({navigation}) {
            
           }}
          />
-         <Drawer.Screen name='Contact' component={Contact}
+         <Drawer.Screen name='AboutUs' component={AboutUs}
             options={{
               drawerIcon: () => (
                 <View>

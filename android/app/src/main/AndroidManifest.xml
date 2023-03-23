@@ -36,10 +36,18 @@
 
            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>   
 
-
-           
-
         </intent-filter>
+
+        
       </activity>
+
+
     </application>
+
+    <queries>
+          <intent>
+            <action android:name="android.intent.action.DIAL" />
+          </intent>
+      </queries>
+      
 </manifest>

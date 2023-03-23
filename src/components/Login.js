@@ -35,8 +35,11 @@ export default function Login({navigation}) {
        catch(err)
        {
           console.log(err);
-          alert("Please SignUp new user")
+          alert(err)
        }
+      //  catch{
+      //   console.log(object)
+      //  }
     }
   return (
     // <View style={styles.main}>
@@ -48,7 +51,7 @@ export default function Login({navigation}) {
           <StatusBar translucent backgroundColor='transparent' />
           
         <View style={{bottom:20}}>
-         <Image source={require('../images/logo_weverve.png')} style={{height:100,width:100}}/>
+         <Image source={require('../images/logo_weverve.png')} style={{height:100,width:100}} />
         </View> 
 
        <View>
@@ -77,7 +80,7 @@ export default function Login({navigation}) {
          onPress={()=>handleLogin()}
        >
          <View style={{marginTop:40,height:50,width:300,justifyContent:"center",alignItems:"center",backgroundColor:'#7CB9E8',borderRadius:10}}>
-            <Text style={{color:"black",fontSize:20,fontWeight:"bold"}}>Login</Text>
+            <Text style={{color:"black",fontSize:20,fontFamily:'Helvetica-Narrow Bold'}}>Login</Text>
          </View>
        
        </TouchableOpacity>
@@ -86,7 +89,7 @@ export default function Login({navigation}) {
          onPress={()=>navigation.navigate(ForgotPassword)}
        >
          <View style={{marginTop:20}}>
-            <Text style={{fontSize:18,color:"white",fontWeight:'bold'}}>ForgotPassword</Text>
+            <Text style={{fontSize:18,color:"white",fontFamily:'Helvetica-Narrow Bold'}}>ForgotPassword</Text>
          </View>
        </TouchableOpacity>
 
@@ -122,9 +125,10 @@ const styles = StyleSheet.create({
         
     },
     heading:{
-        fontSize:30,
-        fontWeight:'bold',
+        fontSize:25,
+        // fontWeight:'bold',
         color:"black",
-        bottom:30
+        bottom:30,
+        fontFamily:'Helvetica-Narrow Bold'
     }
 });
