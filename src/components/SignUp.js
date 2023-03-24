@@ -10,7 +10,8 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 // import logo_weverve from './images/logo_weverve';
 export default function SignUp({navigation}) {
 
-    const [name,setName]=useState("")
+    
+    const [conformpassword,setconformpassword]=useState("")
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
 
@@ -21,7 +22,15 @@ export default function SignUp({navigation}) {
     
     const hadleSignUp = async () => {
       try {
-        if (email.length > 0 && password.length > 0 && name.length > 0) {
+        if (email.length > 0 && password.length > 0 && conformpassword.length > 0) {
+          if (password !== conformpassword) {
+            setAlertTitle('Error')
+            setAlertMessage('Password and Confirm Password must be match.');
+            setAlertButtons([{ text: 'OK', onPress: () => setShowAlert(false) }]);
+            setShowAlert(true);
+            return;
+          }
+    
           const isUserCreated = await auth().createUserWithEmailAndPassword(
             email,
             password
@@ -29,11 +38,16 @@ export default function SignUp({navigation}) {
     
           setEmail('');
           setPassword('');
-          setName('');
-    
+          setconformpassword('');
+         
+          setAlertTitle('Welcome To WeVerve')
+          setAlertMessage('Congratulations Your account has been successfully created.');
+          setAlertButtons([{ text: 'OK', onPress: () => setShowAlert(false) }]);
+          setShowAlert(true);
+              
+      
           const userData = {
             id: isUserCreated.user.uid,
-            name: name,
             email: email,
           };
     
@@ -41,6 +55,9 @@ export default function SignUp({navigation}) {
             .collection('users')
             .doc(isUserCreated.user.id)
             .set(userData);
+
+           
+
         } else {
           setAlertTitle('Please Enter the Input Fields');
           setAlertButtons([{ text: 'OK', onPress: () => setShowAlert(false) }]);
@@ -62,6 +79,7 @@ export default function SignUp({navigation}) {
       }
     };
     
+    
   return (
     // <View style={styles.main}>
     // <LinearGradient  colors={['#E6E6FA',"#E6E6FA"]} style={styles.main}>
@@ -80,17 +98,7 @@ export default function SignUp({navigation}) {
        </View>
        <View>
        
-       <View style={{}}>
-       <TextInput 
-           label="Name"
-           mode="outlined"
-           placeholder='Name' 
-           style={[styles.input,{bottom:10}]}
-           value={name}
-           onChangeText={(text)=>setName(text)}
-          />
-       </View>
-
+      
          <TextInput 
           label="Email"
           mode="outlined"
@@ -107,6 +115,17 @@ export default function SignUp({navigation}) {
           value={password}
           onChangeText={(text)=>setPassword(text)}
          style={[styles.input,{top:10}]}/>
+
+      
+       <TextInput 
+           label="Conformpassword"
+           mode="outlined"
+           placeholder='Conformpassword' 
+           style={[styles.input,{marginTop:20}]}
+           value={conformpassword}
+           onChangeText={(text)=>setconformpassword(text)}
+          />
+       
 
        </View>
        <TouchableOpacity 
@@ -133,7 +152,7 @@ export default function SignUp({navigation}) {
     <AwesomeAlert
       show={showAlert}
       title={alertTitle}
-      animatedValue={0.5}
+      animatedValue={0.7}
       message={alertMessage}
       closeOnTouchOutside={true}
       closeOnHardwareBackPress={false}
@@ -145,8 +164,8 @@ export default function SignUp({navigation}) {
       onConfirmPressed={() => setShowAlert(false)}
       onDismiss={() => setShowAlert(false)}
       buttons={alertButtons}
-      titleStyle={{color:"black",fontSize:20, fontFamily:'Helvetica-Narrow Bold'}}
-      messageStyle={{color:"black",fontSize:15,fontFamily:'WorkSans-Regular',}}
+      titleStyle={{color:"black",fontSize:15, fontFamily:'Helvetica-Narrow Bold'}}
+      messageStyle={{color:"black",fontSize:15,fontFamily:'WorkSans-Regular',textAlign:"justify"}}
       contentContainerStyle={{height:220,with:380,justifyContent:"center",backgroundColor:'#f5f5f5',borderRadius:10}}
       confirmButtonStyle={{height:40,width:80,justifyContent:"center",alignItems:"center"}}
       confirmButtonTextStyle={{fontSize:20,fontFamily:'Helvetica-Narrow Bold',color:"white"}}

@@ -6,12 +6,18 @@ import Home from './Home';
 import ForgotPassword from './ForgotPassword';
 import LinearGradient from 'react-native-linear-gradient';
 import {TextInput} from 'react-native-paper';
+import AwesomeAlert from 'react-native-awesome-alerts';
 // import AuthStack from '../../navigation/AuthStack';
-export default function Login({navigation}) {
 
-    const [name,setName]=useState("")
+export default function Login({navigation}) {
+ 
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertButtons, setAlertButtons] = useState([]);
  
     const handleLogin=async()=>{
        try{
@@ -28,18 +34,21 @@ export default function Login({navigation}) {
        }
 
        else{
-        alert("Please Enter the Input fileds");
+        setAlertTitle('Error');
+        setAlertMessage('Please enter the input fields');
+        setShowAlert(true);
        }
 
       }
        catch(err)
        {
-          console.log(err);
-          alert(err)
+          // console.log(err);
+          // alert(err)
+          setAlertTitle('Error');
+          setAlertMessage('Invalid Email OR Password.');
+          setShowAlert(true);
        }
-      //  catch{
-      //   console.log(object)
-      //  }
+     
     }
   return (
     // <View style={styles.main}>
@@ -100,6 +109,28 @@ export default function Login({navigation}) {
             <Text style={{fontSize:17,color:"black"}}>Dont have an account? SignUp</Text>
          </View>
        </TouchableOpacity>
+
+       <AwesomeAlert
+      show={showAlert}
+      title={alertTitle}
+      animatedValue={0.7}
+      message={alertMessage}
+      closeOnTouchOutside={true}
+      closeOnHardwareBackPress={false}
+      showCancelButton={false}
+      showConfirmButton={true}
+      confirmText="OK"
+      confirmButtonColor="red"
+      onCancelPressed={() => setShowAlert(false)}
+      onConfirmPressed={() => setShowAlert(false)}
+      onDismiss={() => setShowAlert(false)}
+      buttons={alertButtons}
+      titleStyle={{color:"black",fontSize:20, fontFamily:'Helvetica-Narrow Bold'}}
+      messageStyle={{color:"black",fontSize:15,fontFamily:'WorkSans-Regular',}}
+      contentContainerStyle={{height:220,with:380,justifyContent:"center",backgroundColor:'#f5f5f5',borderRadius:10}}
+      confirmButtonStyle={{height:40,width:80,justifyContent:"center",alignItems:"center"}}
+      confirmButtonTextStyle={{fontSize:20,fontFamily:'Helvetica-Narrow Bold',color:"white"}}
+    />
 
       </ImageBackground>
 

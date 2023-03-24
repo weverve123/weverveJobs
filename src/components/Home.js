@@ -124,7 +124,7 @@ export default function Home({navigation}) {
           >
              {/* <View style={styles.btn}> */}
              <LinearGradient colors={['#2193b0', '#2193b0',]} style={styles.btn}>
-              <Text style={styles.btntext}>Apply Now</Text>
+              <Text style={styles.btntext}>More Details</Text>
 
               </LinearGradient>
              {/* </View> */}
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
      flex:1,
     // justifyContent:"center",
      alignItems:"center",
-     paddingBottom:80,
+     paddingBottom:10,
      paddingTop:40,
     padding:20
     

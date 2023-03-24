@@ -10,6 +10,7 @@ import UserDocument from '../src/components/UserDocument';
 // import logout from '../src/components/logout';
 import Authenticate from '@react-native-firebase/auth'
 import AboutUs from '../src/components/AboutUs';
+import UserProfile from '../src/components/UserProfile';
 
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,9 @@ export default function AppStack() {
          options={{headerShown:false}}
         />
         <Stack.Screen name="About" component={AboutUs}/>
+         
+        <Stack.Screen name="UserProfile" component={UserProfile}/> 
+
         <Stack.Screen name="UserDetails" component={UserDetails}
          options={{
           title:"User Details",

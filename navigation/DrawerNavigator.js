@@ -9,7 +9,8 @@ import Contact from '../src/components/AboutUs';
 import Entypo from "react-native-vector-icons/Entypo";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import AboutUs from '../src/components/AboutUs';
-
+import Home from '../src/components/Home';
+import UserProfile from '../src/components/UserProfile';
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator({navigation}) {
@@ -23,19 +24,11 @@ export default function DrawerNavigator({navigation}) {
         drawerInactiveTintColor:'#333'
       }}
      >
+     
+
       {/* <Drawer.Navigator> */}
          
-         <Drawer.Screen name='Home' component={TabStack}
-          options={{
-            drawerIcon: () => (
-              <View>
-                 <Entypo name="home" size={25} color="#11a7bd" />
-               </View>   
-            ),
-           
-          }}
-         />
-         <Drawer.Screen name='AboutUs' component={AboutUs}
+      <Drawer.Screen name='AboutUs' component={AboutUs}
             options={{
               drawerIcon: () => (
                 <View>
@@ -45,6 +38,28 @@ export default function DrawerNavigator({navigation}) {
             }}   
          /> 
 
+      <Drawer.Screen name='App' component={AppStack}
+          options={{
+            title:"Home",
+            drawerIcon: () => (
+              <View>
+                 <Entypo name="home" size={25} color="#11a7bd" />
+               </View>   
+            ),
+           
+          }}
+         />
+         
+         <Drawer.Screen name='UserProfile' component={UserProfile} 
+          options={{  
+            drawerIcon: () => (
+              <View>
+                <Entypo name="user" size={25} color="#11a7bd"/>
+              </View>
+            ) }}          
+        />
+      
+         
          {/* <Drawer.Screen name='Logout' component={Logout}   
             options={{
               drawerIcon: () => (

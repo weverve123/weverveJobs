@@ -585,7 +585,7 @@ async function UplodeResume() {
             value={experance}
             keyboardType="number-pad"
             onChangeText={text => setExpeance(text)}
-            style={{top: 10, width: 300}}
+            style={{top: 10, width: 350}}
           />
         </View>
 
@@ -597,7 +597,7 @@ async function UplodeResume() {
             placeholder="Enter Your Current CTC in LPA"
             value={currentCTC}
             onChangeText={text => setCurrentCTC(text)}
-            style={{top: 10, width: 300}}
+            style={{top: 10, width: 350}}
           />
         </View>
 
@@ -609,7 +609,7 @@ async function UplodeResume() {
             placeholder="Enter thes Notice Period In Month"
             value={noticePeriod}
             onChangeText={text => setNoticePeriod(text)}
-            style={{top: 10, width: 300}}
+            style={{top: 10, width: 350}}
           />
         </View>
 
@@ -711,7 +711,7 @@ const styles = StyleSheet.create({
   },
   mobtext: {
     top: 20,
-    width: 320,
+    width: 350,
     left: 20,
     paddingTop: 10,
   },
