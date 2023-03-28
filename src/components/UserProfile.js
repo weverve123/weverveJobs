@@ -154,29 +154,33 @@ const downloadPdf=()=>{
       alert('Image Downloaded SuccessFully')
     })
 }
-    
-  const hanleEmail =()=>{
+ 
+//////////////////////////// Sending Email ////////////////
+  // const hanleEmail =()=>{
   
-    SMTPMailer.sendMail({
-      mailhost: 'smtp.gmail.com',
-      port: '465',
-      ssl: true,
-      username: 'umeshbhagwat9921@gmail.com',
-      password: 'wfbghucdarxazkcv',
-      from: 'umeshbhagwat9921@gmail.com',
-      recipients: 'umeshbhagwatkopargaon@gmail.com',
-      subject: 'Test Email',
-      htmlBody: '<h1>This is an User data</h1><p>This is a test email.</p>',
-      attachmentPaths:'ExcelData'
-    })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  //   SMTPMailer.sendMail({
+  //     mailhost: 'smtp.gmail.com',
+  //     port: '465',
+  //     ssl: true,
+  //     username: 'umeshbhagwat9921@gmail.com',
+  //     password: 'wfbghucdarxazkcv',
+  //     from: 'umeshbhagwat9921@gmail.com',
+  //     recipients: 'umeshbhagwatkopargaon@gmail.com',
+  //     subject: 'Test Email',
+  //     htmlBody: '<h1>This is an User data</h1><p>This is a test email.</p>',
+  //     attachmentPaths:'ExcelData'
+  //   })
+  //     .then((response) => {
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
 
-  }
+  // }
+
+ ////////////////////////////////////////////////////////////// 
+
 
   return (
     <LinearGradient  colors={['#E6E6FA',"#E6E6FA"]} style={styles.main}>    

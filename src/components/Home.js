@@ -83,7 +83,7 @@ export default function Home({navigation}) {
           // <LinearGradient colors={["#89b1d9", '#89b1d9',]}style={styles.cards}>
           <LinearGradient colors={["white", 'white',]}style={{marginBottom:20,borderRadius:10,justifyContent:"flex-start"}}>
          {/* <View style={styles.cards}> */}
-         <View style={{justifyContent:"center",alignItems:"center"}}>
+         <View style={{justifyContent:"center",padding:10}}>
           <Text style={styles.jobrole}>{item.Jobrole}</Text>
           </View>
 
@@ -194,7 +194,8 @@ const styles = StyleSheet.create({
   },
    
   jobrole:{
-    fontSize:25,
+    fontSize:20,
+    // padding:10,
     // fontWeight:"bold",
     fontFamily:'Helvetica-Narrow Bold',
     color:"black",
@@ -204,13 +205,14 @@ const styles = StyleSheet.create({
     fontSize:16,
     color:"black",
     //  fontFamily:'Futura Light Oblique'
-     fontFamily:'Helvetica-Narrow Bold',
+    //  fontFamily:'Helvetica-Narrow Bold',
+    fontFamily:'Poppins-Regular',
   },
   skills:{
     fontSize:16,
     color:"black",
     top:10,left:10,
-     fontFamily:'Helvetica-Narrow Bold',
+     fontFamily:'Poppins-Regular',
     // fontFamily:'Futura Light Oblique'
   },
   jdText:{

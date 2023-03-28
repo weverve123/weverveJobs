@@ -49,6 +49,7 @@ export default function UserDetails({navigation}) {
   const [list,setList]=useState();
   const [ExcelData,setExcelData]=useState();
   const [ExcelUrl,setExcelUrl]=useState();
+  const [position,setPosition]=useState();
 
   useEffect(()=>{
     getUser();
@@ -116,11 +117,12 @@ const getDatabase= async () =>{
             college,
             qualification,
             experance,
-             skills,
+            skills,
             email,
             currentCTC,
             noticePeriod,
-            newselectedTeam
+            newselectedTeam,
+            position
           })
           console.log("database is avilable..")
          
@@ -534,6 +536,16 @@ async function UplodeResume() {
               placeholder="Enter Your address"
               value={address}
               onChangeText={text => setAddress(text)}
+            />
+          </View>
+
+          <View style={styles.mobtext}>
+            <TextInput
+              label="Position"
+              mode="outlined"
+              placeholder="Position Apply"
+              value={position}
+              onChangeText={text => setPosition(text)}
             />
           </View>
 

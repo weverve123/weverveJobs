@@ -19,13 +19,14 @@ export default function DrawerNavigator({navigation}) {
     <Drawer.Navigator  drawerContent={props =><CustomDrower {...props}/>}
       screenOptions={{
         headerShown:false,
+        // headerTitle:"weverve",
         drawerActiveBackgroundColor:'#99FFFF',
         drawerActiveTintColor:'black',
         drawerInactiveTintColor:'#333'
       }}
      >
      
-
+  
       {/* <Drawer.Navigator> */}
          
       <Drawer.Screen name='AboutUs' component={AboutUs}
